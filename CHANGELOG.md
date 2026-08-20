@@ -12,6 +12,7 @@ First stable release. The tool surface (5 tools) and output shapes are now cover
 
 - CI workflow (build + stdio smoke test on Node 18/20/22).
 - `engines` field (Node ≥ 18) in package metadata.
+- Test suite (19 tests, `node:test`): data layer on a hand-built fixture (hierarchy paths, rate inheritance, Chapter 99 matching, rate parsing, watchlist, revision diff) plus a full MCP stdio round-trip calling every tool. Coverage measured with `c8` and CI-enforced at ≥95% lines / ≥95% functions.
 
 ### Unchanged from 0.1.x
 

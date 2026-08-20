@@ -2,6 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/tariff-resolver)](https://www.npmjs.com/package/tariff-resolver)
 [![CI](https://github.com/opsloft/tariff-resolver/actions/workflows/ci.yml/badge.svg)](https://github.com/opsloft/tariff-resolver/actions/workflows/ci.yml)
+[![coverage: ≥95% lines, CI-enforced](https://img.shields.io/badge/coverage-%E2%89%A595%25_lines-brightgreen)](https://github.com/opsloft/tariff-resolver/actions/workflows/ci.yml)
 [![npm downloads](https://img.shields.io/npm/dm/tariff-resolver)](https://www.npmjs.com/package/tariff-resolver)
 [![node](https://img.shields.io/node/v/tariff-resolver)](https://www.npmjs.com/package/tariff-resolver)
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-io.github.opsloft%2Ftariff--resolver-6366f1)](https://registry.modelcontextprotocol.io/v0/servers?search=tariff-resolver)
