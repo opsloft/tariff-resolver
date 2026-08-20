@@ -1,6 +1,10 @@
 # tariff-resolver
 
 [![npm version](https://img.shields.io/npm/v/tariff-resolver)](https://www.npmjs.com/package/tariff-resolver)
+[![CI](https://github.com/opsloft/tariff-resolver/actions/workflows/ci.yml/badge.svg)](https://github.com/opsloft/tariff-resolver/actions/workflows/ci.yml)
+[![npm downloads](https://img.shields.io/npm/dm/tariff-resolver)](https://www.npmjs.com/package/tariff-resolver)
+[![node](https://img.shields.io/node/v/tariff-resolver)](https://www.npmjs.com/package/tariff-resolver)
+[![MCP Registry](https://img.shields.io/badge/MCP_Registry-io.github.opsloft%2Ftariff--resolver-6366f1)](https://registry.modelcontextprotocol.io/v0/servers?search=tariff-resolver)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
 
 An MCP server that turns your AI assistant into a **US import duty research tool** — built on official USITC Harmonized Tariff Schedule data (US Government public domain, 35,000+ tariff lines).

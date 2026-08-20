@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Smoke test — server starts and lists tools over stdio
+        run: |
+          node - <<'EOF'
+          const { spawn } = require('node:child_process');
+          const p = spawn('node', ['dist/index.js'], { stdio: ['pipe', 'pipe', 'inherit'] });
+          let out = '';
+          const timer = setTimeout(() => { console.error('TIMEOUT: no tools/list response'); p.kill(); process.exit(1); }, 15000);
+          p.stdout.on('data', (d) => {
+            out += d.toString();
+            for (const line of out.split('\n')) {
+              if (!line.trim()) continue;
+              try {
+                const msg = JSON.parse(line);
+                if (msg.id === 2 && msg.result && Array.isArray(msg.result.tools) && msg.result.tools.length >= 5) {
+                  console.log(`OK: ${msg.result.tools.length} tools listed`);
+                  clearTimeout(timer); p.kill(); process.exit(0);
+                }
+              } catch {}
+            }
+          });
+          p.stdin.write(JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'ci', version: '1.0.0' } } }) + '\n');
+          setTimeout(() => {
+            p.stdin.write(JSON.stringify({ jsonrpc: '2.0', method: 'notifications/initialized' }) + '\n');
+            p.stdin.write(JSON.stringify({ jsonrpc: '2.0', id: 2, method: 'tools/list' }) + '\n');
+          }, 1500);
+          EOF

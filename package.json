@@ -1,6 +1,6 @@
 {
   "name": "tariff-resolver",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "mcpName": "io.github.opsloft/tariff-resolver",
   "description": "MCP server: US HTS tariff lookup, chapter-99 additional-duty rules and landed-cost components from official USITC public-domain data. Not affiliated with any government agency.",
   "type": "module",
@@ -11,10 +11,33 @@
     "type": "git",
     "url": "git+https://github.com/opsloft/tariff-resolver.git"
   },
-  "bugs": { "url": "https://github.com/opsloft/tariff-resolver/issues" },
-  "bin": { "tariff-resolver": "dist/index.js" },
-  "files": ["dist", "data/hts_full.json", "data/hts_meta.json", "scripts/fetch_hts.py", "README.md", "LICENSE"],
-  "keywords": ["mcp", "tariff", "hts", "hs-code", "landed-cost", "customs", "duty", "import", "usitc", "section-301", "de-minimis"],
+  "bugs": {
+    "url": "https://github.com/opsloft/tariff-resolver/issues"
+  },
+  "bin": {
+    "tariff-resolver": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "data/hts_full.json",
+    "data/hts_meta.json",
+    "scripts/fetch_hts.py",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "mcp",
+    "tariff",
+    "hts",
+    "hs-code",
+    "landed-cost",
+    "customs",
+    "duty",
+    "import",
+    "usitc",
+    "section-301",
+    "de-minimis"
+  ],
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js"
@@ -26,5 +49,8 @@
   "devDependencies": {
     "@types/node": "^22.0.0",
     "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
