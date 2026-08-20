@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "tariff-resolver": {
+      "command": "node",
+      "args": ["dist/index.js"]
+    }
+  }
+}

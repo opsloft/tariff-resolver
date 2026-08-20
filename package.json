@@ -1,0 +1,22 @@
+{
+  "name": "tariff-resolver",
+  "version": "0.1.0",
+  "description": "MCP server: US HTS tariff lookup, chapter-99 additional-duty rules and landed-cost components from official USITC public-domain data. Not affiliated with any government agency.",
+  "type": "module",
+  "license": "MIT",
+  "bin": { "tariff-resolver": "dist/index.js" },
+  "files": ["dist", "data/hts_full.json", "data/hts_meta.json", "scripts/fetch_hts.py", "README.md", "LICENSE"],
+  "keywords": ["mcp", "tariff", "hts", "hs-code", "landed-cost", "customs", "duty", "import", "usitc", "section-301", "de-minimis"],
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  }
+}
