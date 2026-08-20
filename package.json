@@ -4,6 +4,13 @@
   "description": "MCP server: US HTS tariff lookup, chapter-99 additional-duty rules and landed-cost components from official USITC public-domain data. Not affiliated with any government agency.",
   "type": "module",
   "license": "MIT",
+  "author": "Opsloft <npm@opsloft.dev>",
+  "homepage": "https://opsloft.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opsloft/tariff-resolver.git"
+  },
+  "bugs": { "url": "https://github.com/opsloft/tariff-resolver/issues" },
   "bin": { "tariff-resolver": "dist/index.js" },
   "files": ["dist", "data/hts_full.json", "data/hts_meta.json", "scripts/fetch_hts.py", "README.md", "LICENSE"],
   "keywords": ["mcp", "tariff", "hts", "hs-code", "landed-cost", "customs", "duty", "import", "usitc", "section-301", "de-minimis"],
