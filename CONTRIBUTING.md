@@ -22,4 +22,4 @@ The HTS dataset is fetched from the official USITC export with `scripts/fetch_ht
 
 ## Scope
 
-This project deliberately stays small: US import duty research from official public-domain data, exposed through MCP. Estimates exclude AD/CVD; outputs are not customs, legal or tax advice.
+This project deliberately stays small: US import duty research from official public-domain data, exposed through MCP. Estimates exclude AD/CVD; outputs are not customs, legal, or tax advice.
