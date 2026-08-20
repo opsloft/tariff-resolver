@@ -10,6 +10,8 @@ An MCP server that turns your AI assistant into a **US import duty research tool
 - 📡 **Tariff change tracking**: watchlist your HTS codes, diff rates between HTS revisions
 - 🤖 **AI-optimized, hallucination-resistant**: returns the *actual* Chapter 99 rule text with parsed rates, so your LLM reasons over real exception chains instead of inventing 2024-era numbers
 
+![Demo: resolving duties for a vacuum flask from China, then switching product and origin — the full Chapter 99 stack recalculates live](./docs/demo.gif)
+
 Why now: since the de minimis exemption ended (Aug 29, 2025), **every US-bound shipment needs an HTS code and duty payment** — and 2025–26 rates keep changing by executive order.
 
 **Not affiliated with any government agency. Outputs are candidates/estimates for pre-broker screening — not customs, legal, or tax advice. Estimates exclude AD/CVD duties.**
