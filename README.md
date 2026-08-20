@@ -53,11 +53,11 @@ Or in any MCP client config:
 
 ## Design
 
-The server does **retrieval**, your LLM does the reasoning: Chapter 99 rules are returned verbatim (with parsed `adder_pct` where applicable) so the model reads the actual exception chains instead of trusting a black-box calculation. Rates for 10-digit statistical suffixes inherit from their parent rate line. Terminated provisions are filtered out and counted.
+The server does the **retrieval**; your LLM does the reasoning. Chapter 99 rules are returned verbatim (with parsed `adder_pct` where applicable) so the model reads the actual exception chains instead of trusting a black-box calculation. Rates for 10-digit statistical suffixes inherit from their parent rate line. Terminated provisions are filtered out and counted.
 
 ## Data
 
-Ships with a full HTS snapshot (USITC official JSON API, public domain). Refresh anytime:
+Ships with a full HTS snapshot, fetched from USITC's official JSON API (US Government public domain). Refresh anytime:
 
 ```bash
 python3 scripts/fetch_hts.py   # ~2 min, fails hard rather than write a partial dataset

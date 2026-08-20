@@ -4,7 +4,7 @@ Thanks for your interest in improving tariff-resolver!
 
 ## Bugs & feature requests
 
-Open an issue at <https://github.com/opsloft/tariff-resolver/issues>. For rate discrepancies, please include the HTS number, origin country and the [hts.usitc.gov](https://hts.usitc.gov) revision you compared against — that makes verification fast.
+Open an issue at <https://github.com/opsloft/tariff-resolver/issues>. For rate discrepancies, please include the HTS number, origin country, and the [hts.usitc.gov](https://hts.usitc.gov) revision you compared against — that makes verification fast.
 
 ## Development
 

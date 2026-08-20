@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] — 2026-08-20
 
-First stable release. The tool surface (5 tools) and output shapes are now covered by semver: breaking changes to tool names, input schemas or result fields will bump the major version.
+First stable release. The tool surface (5 tools) and output shapes are now covered by semver: breaking changes to tool names, input schemas, or result fields will bump the major version.
 
 ### Added
 
