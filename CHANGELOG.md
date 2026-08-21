@@ -4,6 +4,15 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] — 2026-08-21
+
+### Changed
+
+- Registry metadata enriched: `server.json` now declares `repository` (with stable GitHub repo ID) and `websiteUrl`, per MCP Registry schema recommendations for transparency and security inspection.
+- npm README for this version picks up the demo GIF, copy fixes, and the current badge row (frozen per-version on npm).
+
+No functional changes — tool surface and outputs identical to 1.0.0.
+
 ## [1.0.0] — 2026-08-20
 
 First stable release. The tool surface (5 tools) and output shapes are now covered by semver: breaking changes to tool names, input schemas, or result fields will bump the major version.
