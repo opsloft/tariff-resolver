@@ -135,8 +135,8 @@ test("diffRates reports changed, added, and deleted lines, with code scoping", (
     const all = data.diffRates();
     assert.equal(all.prev_date, "2026-07-01");
     assert.ok(all.changes.some((c) => c.htsno === "6109.10.00" && c.field === "general" && c.old === "10%" && c.new === "16.5%"));
-    assert.ok(all.changes.some((c) => c.htsno === "9903.02.69" && c.field === "(dòng mới)"));
-    assert.ok(all.changes.some((c) => c.htsno === "6601.20.00" && c.field === "(dòng bị xóa)"));
+    assert.ok(all.changes.some((c) => c.htsno === "9903.02.69" && c.field === "(new line)"));
+    assert.ok(all.changes.some((c) => c.htsno === "6601.20.00" && c.field === "(line removed)"));
     const scoped = data.diffRates(["6109"]);
     assert.ok(scoped.changes.length >= 1);
     assert.ok(scoped.changes.every((c) => c.htsno.replace(/\D/g, "").startsWith("6109")));

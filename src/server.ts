@@ -1,10 +1,10 @@
 /**
- * tariff-resolver — MCP server tra thuế nhập khẩu Mỹ trên dữ liệu USITC public domain.
+ * tariff-resolver — MCP server for US import duty research on USITC public-domain data.
  *
- * Nguyên tắc thiết kế:
- * - Server làm RETRIEVAL, LLM client làm suy luận: chương 99 trả raw rule + exception,
- *   không tự phán rule nào áp dụng.
- * - Mọi output là ứng viên/ước tính kèm link nguồn chính thức — không phải tư vấn hải quan.
+ * Design principles:
+ * - The server does RETRIEVAL, the LLM client does the reasoning: chapter 99 comes back
+ *   as raw rules + exceptions; the server never decides which rule applies.
+ * - Every output is a candidate/estimate with official source links — not customs advice.
  */
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
@@ -20,41 +20,42 @@ const DISCLAIMER =
 const fmtLine = (e: HtsEntry) =>
   [
     `**${e.htsno}** — ${e.path}`,
-    `  general (MFN): ${e.eff_general || "—"}${e.rate_inherited ? " (kế thừa dòng cha)" : ""} | special (FTA): ${e.eff_special || "—"} | column 2: ${e.eff_other || "—"}`,
-    e.units?.length ? `  đơn vị: ${e.units.join(", ")}` : "",
-    `  nguồn: https://hts.usitc.gov/search?query=${encodeURIComponent(e.htsno)} | tiền lệ phân loại: https://rulings.cbp.gov/search?term=${encodeURIComponent(e.htsno.slice(0, 7))}`,
+    `  general (MFN): ${e.eff_general || "—"}${e.rate_inherited ? " (inherited from parent line)" : ""} | special (FTA): ${e.eff_special || "—"} | column 2: ${e.eff_other || "—"}`,
+    e.units?.length ? `  units: ${e.units.join(", ")}` : "",
+    `  source: https://hts.usitc.gov/search?query=${encodeURIComponent(e.htsno)} | classification rulings: https://rulings.cbp.gov/search?term=${encodeURIComponent(e.htsno.slice(0, 7))}`,
   ].filter(Boolean).join("\n");
 
 const ruleObj = (e: HtsEntry) => ({
   heading: e.htsno,
   adder_pct: parseAdderPct(e.eff_general || e.general || ""),
-  rate_text: e.eff_general || e.general || "(xem mô tả)",
+  rate_text: e.eff_general || e.general || "(see description)",
   rule_verbatim: e.path,
 });
 
 export function buildServer(): McpServer {
-  const server = new McpServer({ name: "tariff-resolver", version: "0.1.0" });
+  const server = new McpServer({ name: "tariff-resolver", version: "1.0.2" });
 
   server.registerTool(
     "search_hs_candidates",
     {
-      title: "Tìm ứng viên mã HTS theo mô tả sản phẩm",
+      title: "Search HTS code candidates",
+      annotations: { readOnlyHint: true, openWorldHint: false },
       description:
-        "Trả về top ứng viên mã HTS 8-10 số (kèm thuế MFN/FTA và link tiền lệ CROSS) cho một mô tả sản phẩm. " +
-        "Kết quả là ỨNG VIÊN để sàng lọc trước khi hỏi broker, không phải phán quyết phân loại. " +
-        "QUAN TRỌNG: HTS dùng thuật ngữ pháp lý, không dùng tên thương mại — TRƯỚC KHI GỌI hãy dịch mô tả sản phẩm " +
-        "sang danh từ vật liệu + công dụng kiểu HTS (vd 'pink kids backpack' → 'travel bags of man-made fibers'; " +
-        "'water bottle' → 'vacuum flask' hoặc 'bottle of plastics'). Nếu 0 kết quả, thử lại với 2-3 cách diễn đạt khác.",
+        "Returns top 8-10 digit HTS code candidates (with MFN/FTA rates and CBP CROSS ruling links) for a product description. " +
+        "Results are CANDIDATES for pre-broker screening, not a classification ruling. " +
+        "IMPORTANT: the HTS uses legal terminology, not trade names — BEFORE CALLING, rewrite the product description " +
+        "into HTS-style material + use nouns (e.g. 'pink kids backpack' → 'travel bags of man-made fibers'; " +
+        "'water bottle' → 'vacuum flask' or 'bottle of plastics'). If you get 0 results, retry with 2-3 different phrasings.",
       inputSchema: {
-        product_description: z.string().describe("Mô tả sản phẩm tiếng Anh: chất liệu, công dụng, thành phần (vd 'stainless steel insulated water bottle 500ml')"),
-        limit: z.number().int().min(1).max(10).default(5).describe("Số ứng viên"),
+        product_description: z.string().describe("Product description in English: material, use, composition (e.g. 'stainless steel insulated water bottle 500ml')"),
+        limit: z.number().int().min(1).max(10).default(5).describe("Number of candidates"),
       },
     },
     async ({ product_description, limit }) => {
       const hits = searchCandidates(product_description, limit);
       const body = hits.length
         ? hits.map(fmtLine).join("\n\n")
-        : "Không thấy ứng viên nào — thử mô tả bằng danh từ vật liệu/công dụng tiếng Anh đơn giản hơn (search theo từ khóa trên văn bản HTS).";
+        : "No candidates found — try simpler English material/use nouns (search is keyword-based over HTS text).";
       return {
         content: [{ type: "text", text: `${DISCLAIMER}\n\n${body}` }],
       };
@@ -64,26 +65,27 @@ export function buildServer(): McpServer {
   server.registerTool(
     "calculate_tariff_scenario",
     {
-      title: "Kịch bản thuế cho một mã HTS + xuất xứ + trị giá",
+      title: "Calculate tariff scenario",
+      annotations: { readOnlyHint: true, openWorldHint: false },
       description:
-        "Trả về thuế MFN/FTA của mã HTS, TOÀN BỘ rule chương 99 (thuế bổ sung IEEPA/301/232) khớp xuất xứ ở dạng nguyên văn, " +
-        "và phí MPF/HMF. LLM hãy tự đọc chuỗi exception của chương 99 để cộng đúng lớp thuế, giải thích từng bước cho user, " +
-        "và luôn nhắc đây là ước tính.",
+        "Returns the HTS code's MFN/FTA base rate, ALL active chapter 99 rules (IEEPA/301/232 additional duties) matching " +
+        "the origin as verbatim text, and MPF/HMF fees. The LLM should walk the chapter-99 exception chains itself to stack " +
+        "the right duty layers, explain each step to the user, and always note this is an estimate.",
       inputSchema: {
-        hts_code: z.string().describe("Mã HTS 8-10 số, có chấm hay không đều được"),
-        origin_country: z.string().describe("Nước xuất xứ (tên tiếng Anh, vd 'China', 'Vietnam', 'Mexico')"),
-        customs_value_usd: z.number().positive().describe("Trị giá hải quan lô hàng (USD)"),
-        ocean_freight: z.boolean().default(false).describe("Hàng đi đường biển? (áp HMF)"),
-        weight_kg: z.number().positive().optional().describe("Tổng trọng lượng (kg) — BẮT BUỘC nếu mã có thuế đặc thù theo kg (vd '12.4¢/kg')"),
-        quantity: z.number().positive().optional().describe("Số lượng theo đơn vị của mã (No./Dz Pcs...) — cần cho thuế đặc thù theo chiếc"),
+        hts_code: z.string().describe("8-10 digit HTS code, with or without dots"),
+        origin_country: z.string().describe("Country of origin (English name, e.g. 'China', 'Vietnam', 'Mexico')"),
+        customs_value_usd: z.number().positive().describe("Customs value of the shipment (USD)"),
+        ocean_freight: z.boolean().default(false).describe("Ocean shipment? (applies HMF)"),
+        weight_kg: z.number().positive().optional().describe("Total weight (kg) — REQUIRED when the code carries a specific duty per kg (e.g. '12.4¢/kg')"),
+        quantity: z.number().positive().optional().describe("Quantity in the code's units (No./Dz Pcs...) — needed for per-piece specific duties"),
       },
     },
     async ({ hts_code, origin_country, customs_value_usd, ocean_freight, weight_kg, quantity }) => {
       const lines = findByCode(hts_code);
       if (!lines.length) {
-        return { content: [{ type: "text", text: `Không tìm thấy mã ${hts_code} trong HTS hiện hành (rev ${DATASET_INFO.fetched_at}).` }] };
+        return { content: [{ type: "text", text: `Code ${hts_code} not found in the current HTS (rev ${DATASET_INFO.fetched_at}).` }] };
       }
-      // active-only cho LLM (fix P0: LLM hay cộng nhầm rule đã terminated); đếm số rule bị lọc để minh bạch
+      // active-only for the LLM (P0 fix: LLMs tend to stack terminated rules); count filtered rules for transparency
       const linkedAll = [...new Map(lines.flatMap(ch99FromFootnotes).map((e) => [e.htsno, e])).values()];
       const originAll = ch99ForOrigin(origin_country).filter((e) => !linkedAll.some((l) => l.htsno === e.htsno));
       const linked = linkedAll.filter((e) => !e.terminated);
@@ -107,7 +109,7 @@ export function buildServer(): McpServer {
           other_candidate_lines: lines.slice(1, 4).map((l) => l.htsno),
         },
         ch99_additional_duties: {
-          note: "Các rule dưới đây là ỨNG VIÊN đang active (rule terminated đã lọc). LLM: đọc rule_verbatim — chuỗi 'Except for...' quyết định rule nào áp; adder_pct đã parse sẵn để cộng, KHÔNG tự bịa số.",
+          note: "The rules below are active CANDIDATES (terminated rules already filtered out). LLM: read rule_verbatim — the 'Except for...' chains decide which rule applies; adder_pct is pre-parsed for stacking, do NOT invent numbers.",
           terminated_rules_excluded: nTerm,
           linked_by_footnote: linked.map(ruleObj),
           matched_by_origin_name: origin.map(ruleObj),
@@ -122,12 +124,12 @@ export function buildServer(): McpServer {
         quantity: quantity ?? null,
         duty_units: base.units ?? [],
         llm_guidance:
-          "landed duty ≈ customs_value × (general_mfn.pct + adder_pct của các rule ch99 áp dụng)/100 + mpf + hmf. " +
-          "Nếu general_mfn.pct = null thì đây là thuế đặc thù/hỗn hợp (vd '12.4¢/kg + 2%') — cần weight_kg/quantity để tính; " +
-          "nếu user chưa cung cấp, HỎI LẠI thay vì đoán. Với rule ch99 có adder_pct = null, đọc rate_text — có thể là thuế đặc thù. " +
-          "Nếu origin thuộc chương trình trong special_fta thì dùng mức special thay cho general. " +
-          "Giải thích từng lớp, dẫn heading. Luôn nhắc: ước tính CHƯA GỒM AD/CVD, cần broker xác nhận. " +
-          `Nguồn đối chiếu: https://hts.usitc.gov/search?query=${encodeURIComponent(base.htsno)}`,
+          "landed duty ≈ customs_value × (general_mfn.pct + adder_pct of applicable ch99 rules)/100 + mpf + hmf. " +
+          "If general_mfn.pct is null the rate is specific/compound (e.g. '12.4¢/kg + 2%') — weight_kg/quantity is needed to compute it; " +
+          "if the user hasn't provided them, ASK instead of guessing. For ch99 rules with adder_pct = null, read rate_text — it may be a specific duty. " +
+          "If the origin belongs to a program listed in special_fta, use the special rate instead of general. " +
+          "Explain each layer, cite headings. Always note: estimate EXCLUDES AD/CVD and needs broker confirmation. " +
+          `Cross-check source: https://hts.usitc.gov/search?query=${encodeURIComponent(base.htsno)}`,
       };
       return { content: [{ type: "text", text: JSON.stringify(structured, null, 2) }] };
     }
@@ -136,13 +138,14 @@ export function buildServer(): McpServer {
   server.registerTool(
     "watch_tariff_changes",
     {
-      title: "Đăng ký theo dõi thay đổi thuế cho danh sách mã HTS",
+      title: "Watch HTS codes for tariff changes",
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
       description:
-        "Lưu các mã HTS (kèm xuất xứ) vào watchlist. Sau mỗi lần dataset được cập nhật, gọi check_tariff_updates " +
-        "để xem mức thuế của các mã này có đổi không. Đây là cách bám sát biến động thuế quan 2025-2026 mà không phải tự dò.",
+        "Saves HTS codes (with optional origin) to a local watchlist. After each dataset refresh, call check_tariff_updates " +
+        "to see whether the rates on these codes changed. This is how you track 2025-2026 tariff volatility without manual re-checking.",
       inputSchema: {
-        hts_codes: z.array(z.string()).min(1).max(200).describe("Danh sách mã HTS 8-10 số cần theo dõi"),
-        origin_country: z.string().optional().describe("Xuất xứ chung của lô hàng (tùy chọn)"),
+        hts_codes: z.array(z.string()).min(1).max(200).describe("8-10 digit HTS codes to watch"),
+        origin_country: z.string().optional().describe("Shared origin for the shipment (optional)"),
       },
     },
     async ({ hts_codes, origin_country }) => {
@@ -155,7 +158,7 @@ export function buildServer(): McpServer {
       }
       saveWatchlist(list);
       return {
-        content: [{ type: "text", text: `Đã theo dõi ${added.length} mã mới (bỏ qua mã không tồn tại/đã có). Tổng watchlist: ${list.length} mã. Gọi check_tariff_updates sau mỗi lần dataset cập nhật.` }],
+        content: [{ type: "text", text: `Now watching ${added.length} new code(s) (unknown/already-watched codes skipped). Watchlist total: ${list.length} code(s). Call check_tariff_updates after each dataset refresh.` }],
       };
     }
   );
@@ -163,25 +166,26 @@ export function buildServer(): McpServer {
   server.registerTool(
     "check_tariff_updates",
     {
-      title: "Kiểm tra thay đổi thuế giữa 2 bản dataset",
+      title: "Check tariff changes between revisions",
+      annotations: { readOnlyHint: true, openWorldHint: false },
       description:
-        "So sánh bản HTS hiện tại với bản fetch trước đó. Không truyền mã → kiểm tra toàn bộ watchlist. " +
-        "Trả về từng thay đổi: mã, cột (general/special/other/additionalDuties), giá trị cũ → mới.",
+        "Compares the current HTS snapshot with the previously fetched one. Call without codes to check the whole watchlist. " +
+        "Returns each change: code, column (general/special/other/additionalDuties), old → new value.",
       inputSchema: {
-        hts_codes: z.array(z.string()).optional().describe("Giới hạn vào các mã này (mặc định: watchlist)"),
+        hts_codes: z.array(z.string()).optional().describe("Limit to these codes (default: the watchlist)"),
       },
     },
     async ({ hts_codes }) => {
       const codes = hts_codes?.length ? hts_codes : loadWatchlist().map((w) => w.hts_code);
       const res = diffRates(codes.length ? codes : undefined);
       if (!res) {
-        return { content: [{ type: "text", text: `Chưa có bản dataset trước để so (mới fetch 1 lần — ${DATASET_INFO.fetched_at}). Chạy lại scripts/fetch_hts.py ở lần cập nhật sau.` }] };
+        return { content: [{ type: "text", text: `No previous dataset to compare against (single fetch so far — ${DATASET_INFO.fetched_at}). Re-run scripts/fetch_hts.py at the next update.` }] };
       }
-      const head = `So sánh ${res.prev_date} → ${DATASET_INFO.fetched_at}` + (codes.length ? ` (phạm vi: ${codes.length} mã)` : " (toàn bộ HTS)");
+      const head = `Comparing ${res.prev_date} → ${DATASET_INFO.fetched_at}` + (codes.length ? ` (scope: ${codes.length} code(s))` : " (entire HTS)");
       const body = res.changes.length
         ? res.changes.slice(0, 100).map((c) => `- **${c.htsno}** [${c.field}]: "${c.old}" → "${c.new}"`).join("\n") +
-          (res.changes.length > 100 ? `\n…và ${res.changes.length - 100} thay đổi nữa` : "")
-        : "Không có thay đổi nào cho phạm vi này.";
+          (res.changes.length > 100 ? `\n…and ${res.changes.length - 100} more change(s)` : "")
+        : "No changes for this scope.";
       return { content: [{ type: "text", text: `${head}\n\n${body}` }] };
     }
   );
@@ -189,8 +193,9 @@ export function buildServer(): McpServer {
   server.registerTool(
     "dataset_info",
     {
-      title: "Thông tin dataset HTS đang phục vụ",
-      description: "Ngày tải, nguồn, license, số dòng — dùng để kiểm tra độ tươi của dữ liệu.",
+      title: "Dataset info",
+      annotations: { readOnlyHint: true, openWorldHint: false },
+      description: "Fetch date, source, license, row counts — use to check data freshness.",
       inputSchema: {},
     },
     async () => ({

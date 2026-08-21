@@ -1,0 +1,47 @@
+{
+  "manifest_version": "0.3",
+  "name": "tariff-resolver",
+  "display_name": "Tariff Resolver — US Import Duties",
+  "version": "1.0.2",
+  "description": "US import duty research: HTS code candidates, Chapter 99 additional duties, MPF/HMF fees, and landed-cost components from official USITC data.",
+  "long_description": "Turns Claude into a US import duty research tool, built on the official USITC Harmonized Tariff Schedule (US Government public domain, 35,000+ tariff lines).\n\n- HTS code candidates from plain product descriptions, with CBP CROSS ruling links\n- Landed-cost components: MFN/FTA base rates + Chapter 99 additional duties (IEEPA / Section 301 / 232) + MPF/HMF fees\n- Tariff change tracking: watchlist your HTS codes, diff rates between HTS revisions\n- Hallucination-resistant: returns the actual Chapter 99 rule text with parsed rates, so Claude reasons over real exception chains instead of inventing outdated numbers\n\nNot affiliated with any government agency. Outputs are candidates/estimates for pre-broker screening — not customs, legal, or tax advice. Estimates exclude AD/CVD duties.",
+  "author": {
+    "name": "Opsloft",
+    "email": "tom@opsloft.dev",
+    "url": "https://opsloft.dev"
+  },
+  "icon": "icon.png",
+  "homepage": "https://opsloft.dev",
+  "documentation": "https://github.com/opsloft/tariff-resolver#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/opsloft/tariff-resolver.git"
+  },
+  "privacy_policies": ["https://opsloft.dev/privacy"],
+  "keywords": ["tariff", "hts", "hs-code", "customs", "duty", "landed-cost", "import", "usitc", "section-301"],
+  "license": "MIT",
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/dist/index.js"],
+      "env": {
+        "HTS_WATCHLIST_FILE": "${HOME}/.tariff-resolver-watchlist.json"
+      }
+    }
+  },
+  "tools": [
+    { "name": "search_hs_candidates", "description": "Product description → top HTS candidates with rates and CBP CROSS ruling links" },
+    { "name": "calculate_tariff_scenario", "description": "HTS code + origin + customs value → base MFN/FTA rate, active Chapter 99 additional duties, MPF/HMF fees" },
+    { "name": "watch_tariff_changes", "description": "Register HTS codes to a local watchlist" },
+    { "name": "check_tariff_updates", "description": "Diff current vs previous HTS revision to see which rates changed" },
+    { "name": "dataset_info", "description": "Data revision date, row counts, source, license" }
+  ],
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": {
+      "node": ">=18.0.0"
+    }
+  }
+}

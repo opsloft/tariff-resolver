@@ -4,6 +4,18 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] — 2026-08-21
+
+### Changed
+
+- **All user-facing text is now English**: tool titles, descriptions, input schema docs, result messages, and revision-diff markers ("(new line)" / "(line removed)"). Earlier versions mixed Vietnamese into tool output.
+- Tool annotations added for every tool (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`) per MCP directory review standards.
+
+### Added
+
+- Privacy policy: section in README and https://opsloft.dev/privacy (the server runs fully local and collects nothing).
+- Claude Desktop one-click install: `.mcpb` bundle build (`scripts/build_mcpb.sh`, manifest in `mcpb/`), attached to GitHub Releases.
+
 ## [1.0.1] — 2026-08-21
 
 ### Changed

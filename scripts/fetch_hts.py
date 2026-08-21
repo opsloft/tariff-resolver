@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Tải toàn bộ HTS (Harmonized Tariff Schedule) từ USITC REST API -> data/hts_full.json.
+"""Fetch the full HTS (Harmonized Tariff Schedule) from the USITC REST API -> data/hts_full.json.
 
-Nguồn: hts.usitc.gov/reststop/exportList — dữ liệu chính phủ Mỹ, public domain.
-Transport: curl subprocess (dùng CA hệ thống, không phụ thuộc certifi — chạy được sau corporate proxy).
-Lịch sự: 1 req/s, UA trung tính, retry 1 lần khi lỗi mạng.
+Source: hts.usitc.gov/reststop/exportList — US Government data, public domain.
+Transport: curl subprocess (uses the system CA store, no certifi dependency — works behind corporate proxies).
+Politeness: 1 req/s, neutral UA, one retry on network errors.
 
-Chạy: python3 scripts/fetch_hts.py
+Run:    python3 scripts/fetch_hts.py
 Output: data/hts_full.json  {"fetched_at": ..., "rows": [...]}
-        data/hts_meta.json  thống kê theo chương (đối chiếu khi cập nhật)
+        data/hts_meta.json  per-chapter stats (for cross-checking updates)
 """
 import json
 import subprocess
@@ -21,7 +21,7 @@ DATA = ROOT / "data"
 UA = "research-script/1.0"
 BASE = "https://hts.usitc.gov/reststop/exportList"
 
-# Chương 01-97 (77 để trống - reserved), 98 (special), 99 (thuế bổ sung IEEPA/301)
+# Chapters 01-97 (77 is reserved/empty), 98 (special), 99 (IEEPA/301 additional duties)
 CHAPTERS = [c for c in range(1, 100) if c != 77]
 
 
@@ -38,7 +38,7 @@ def fetch_chapter(ch: int) -> list[dict]:
                 pass
         if attempt == 1:
             time.sleep(3)
-    print(f"  LOI chuong {ch:02d} (2 lan)", flush=True)
+    print(f"  FAILED chapter {ch:02d} (2 attempts)", flush=True)
     return []
 
 
@@ -54,17 +54,18 @@ def main() -> None:
         per_chapter[f"{ch:02d}"] = len(rows)
         all_rows.extend(rows)
         if ch % 10 == 0:
-            print(f"  ...chuong {ch:02d}: cong don {len(all_rows)} dong", flush=True)
+            print(f"  ...chapter {ch:02d}: {len(all_rows)} rows so far", flush=True)
         time.sleep(1)
 
-    # Review agy 18/08: TUYỆT ĐỐI không ghi đè DB khi thiếu chương — chương lỗi mạng
-    # sẽ "bốc hơi" lặng lẽ. Fail cứng, giữ nguyên bản cũ (rotation chỉ làm sau khi đủ).
+    # NEVER overwrite the dataset when chapters are missing — a chapter lost to a
+    # network error would silently vanish. Fail hard and keep the old snapshot
+    # (rotation only happens once the fetch is complete).
     if failed:
-        print(f"HUY CAP NHAT: {len(failed)} chuong loi {failed} — giu nguyen ban cu", flush=True)
+        print(f"UPDATE ABORTED: {len(failed)} chapter(s) failed {failed} — keeping the previous snapshot", flush=True)
         sys.exit(1)
     cur = DATA / "hts_full.json"
     if cur.exists():
-        cur.replace(DATA / "hts_full.prev.json")  # mốc diff cho watch_tariff_changes
+        cur.replace(DATA / "hts_full.prev.json")  # diff baseline for watch_tariff_changes
     (DATA / "hts_full.json").write_text(
         json.dumps({"fetched_at": date.today().isoformat(), "source": BASE,
                     "license": "US Government public domain", "rows": all_rows},
@@ -73,9 +74,9 @@ def main() -> None:
         {"fetched_at": date.today().isoformat(), "total": len(all_rows),
          "per_chapter": per_chapter}, indent=2))
     empty = [c for c, n in per_chapter.items() if n == 0 and c != "77"]
-    print(f"XONG: {len(all_rows)} dong. Chuong rong bat thuong: {empty or 'khong'}", flush=True)
+    print(f"DONE: {len(all_rows)} rows. Unexpectedly empty chapters: {empty or 'none'}", flush=True)
     if len(all_rows) < 20000:
-        print("CANH BAO: it hon 20k dong — kiem tra lai truoc khi dung", flush=True)
+        print("WARNING: fewer than 20k rows — verify before using", flush=True)
         sys.exit(1)
 
 

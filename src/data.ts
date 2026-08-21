@@ -1,9 +1,9 @@
 /**
- * Lớp dữ liệu: nạp HTS full (USITC, public domain) từ data/hts_full.json.
+ * Data layer: loads the full HTS snapshot (USITC, public domain) from data/hts_full.json.
  *
- * Cấu trúc HTS là cây phân cấp theo `indent`: mô tả của một dòng lá chỉ đầy đủ
- * khi ghép với chuỗi tổ tiên (vd "Umbrellas > Garden or similar umbrellas").
- * Ta dựng `path` cho từng dòng bằng stack theo indent ngay lúc nạp.
+ * The HTS is a hierarchy encoded by `indent`: a leaf line's description is only
+ * complete when joined with its ancestor chain (e.g. "Umbrellas > Garden or similar
+ * umbrellas"). We build a `path` for every line with an indent stack at load time.
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -20,9 +20,9 @@ export type HtsRow = {
 };
 export type HtsEntry = HtsRow & {
   path: string;
-  /** Thuế hiệu lực: của chính dòng, hoặc kế thừa dòng cha gần nhất (suffix 10 số thường trống) */
+  /** Effective rate: the line's own, or inherited from the nearest parent rate line (10-digit statistical suffixes are usually blank) */
   eff_general: string; eff_special: string; eff_other: string; rate_inherited: boolean;
-  /** Rule ch99 đã bị vô hiệu (compiler's note: provision terminated) */
+  /** Chapter 99 rule that is no longer in force (compiler's note: provision terminated) */
   terminated: boolean;
 };
 
@@ -42,8 +42,9 @@ export const entries: HtsEntry[] = [];
       .map((s) => (s ?? "").trim().replace(/:$/, ""))
       .filter(Boolean)
       .join(" > ");
-    // Kế thừa thuế từ tổ tiên gần nhất — CHỈ cho suffix thống kê (>=9 số): dòng 8 số
-    // không có thuế là heading cấu trúc, kế thừa xuyên cấp sẽ gán nhầm (review agy 18/08)
+    // Inherit rates from the nearest rated ancestor — ONLY for statistical suffixes
+    // (>= 9 digits): an 8-digit line without rates is a structural heading, and
+    // inheriting across heading levels would assign the wrong rate.
     let eg = r.general || "", es = r.special || "", eo = r.other || "", inherited = false;
     if (!eg && (r.htsno || "").replace(/\D/g, "").length >= 9) {
       for (let i = stack.length - 1; i >= 0; i--) {
@@ -58,15 +59,15 @@ export const entries: HtsEntry[] = [];
   }
 }
 
-/** Dòng "tính được thuế": có mã HTS >= 8 số và có cột thuế general khác rỗng. */
+/** "Rateable" lines: HTS code of >= 8 digits with a non-empty general rate column. */
 export const rateLines: HtsEntry[] = entries.filter(
   (e) => e.htsno && e.htsno.replace(/\D/g, "").length >= 8 && !e.htsno.startsWith("99")
 );
 
-/** Chương 99: thuế bổ sung (IEEPA, Section 301, 232...) dạng raw rule. */
+/** Chapter 99: additional duties (IEEPA, Section 301, 232, ...) as raw rules. */
 export const ch99: HtsEntry[] = entries.filter((e) => e.htsno?.startsWith("99"));
 
-/** Tìm ứng viên mã HS theo mô tả sản phẩm — keyword scoring trên path đầy đủ. */
+/** Find HS code candidates for a product description — keyword scoring over the full path. */
 export function searchCandidates(query: string, limit = 5): HtsEntry[] {
   const q = query.toLowerCase();
   const words = q.replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter((w) => w.length > 2);
@@ -77,7 +78,7 @@ export function searchCandidates(query: string, limit = 5): HtsEntry[] {
       let score = 0;
       if (hay.includes(q)) score += 8;
       for (const w of words) if (hay.includes(w)) score += 1;
-      // ưu tiên dòng lá 10 số (có suffix thống kê) hơn heading 8 số
+      // prefer 10-digit leaf lines (statistical suffixes) over 8-digit headings
       if (e.htsno.replace(/\D/g, "").length >= 10) score += 0.5;
       return { e, score };
     })
@@ -86,19 +87,20 @@ export function searchCandidates(query: string, limit = 5): HtsEntry[] {
   return scored.slice(0, limit).map((x) => x.e);
 }
 
-/** Tra dòng thuế theo mã (10 số, 8 số, hoặc prefix). */
+/** Look up rate lines by code (10-digit, 8-digit, or prefix). */
 export function findByCode(code: string): HtsEntry[] {
   const digits = code.replace(/\D/g, "");
   if (!digits) return [];
   const exact = rateLines.filter((e) => e.htsno.replace(/\D/g, "") === digits);
   if (exact.length) return exact;
-  // prefix so trên chuỗi đã bỏ chấm — miễn nhiễm mọi kiểu nhập (review agy 18/08)
+  // prefix match on the digits-only string — immune to any input formatting
   return rateLines.filter((e) => e.htsno.replace(/\D/g, "").startsWith(digits)).slice(0, 10);
 }
 
 /**
- * Rule chương 99 có thể liên quan tới một xuất xứ: match tên nước trong path.
- * KHÔNG tự suy luận rule nào thắng — trả raw để LLM client đọc chuỗi exception.
+ * Chapter 99 rules potentially relevant to an origin: country-name match in the path.
+ * Deliberately does NOT decide which rule wins — returns raw rules so the LLM client
+ * can read the exception chains.
  */
 export function ch99ForOrigin(origin: string, limit = 25): HtsEntry[] {
   const o = origin.trim().toLowerCase();
@@ -117,31 +119,31 @@ export function ch99ForOrigin(origin: string, limit = 25): HtsEntry[] {
     .slice(0, limit);
 }
 
-/** Rule ch99 áp cho MỌI xuất xứ ("all countries"/"any country") — luôn phải trả để không sót (fix P0). */
+/** Chapter 99 rules that apply to EVERY origin ("all countries"/"any country") — always returned so none are missed. */
 export function ch99Universal(limit = 10): HtsEntry[] {
   const rx = /all countries|any country|from all|of any country/i;
   return ch99.filter((e) => !e.terminated && rx.test(e.path)).slice(0, limit);
 }
 
-/** "+ 25%" trong rule ch99 -> 25; null nếu không parse được (rule dạng khác). */
+/** "+ 25%" inside a chapter-99 rule -> 25; null when unparsable (other rule shapes). */
 export const parseAdderPct = (rule: string): number | null => {
   const m = rule.match(/\+\s*([\d.]+)\s*%/);
   return m ? Number(m[1]) : null;
 };
-/** "7.2%" -> 7.2; null cho thuế đặc thù ("12.4¢/kg") hoặc "Free". */
+/** "7.2%" -> 7.2; null for specific duties ("12.4¢/kg"); "Free" -> 0. */
 export const parseRatePct = (rate: string): number | null => {
   if (/^free$/i.test(rate.trim())) return 0;
   const m = rate.trim().match(/^([\d.]+)\s*%$/);
   return m ? Number(m[1]) : null;
 };
 
-/** Phí cố định nhập khẩu Mỹ — công thức công khai của CBP, điều chỉnh hằng năm. */
+/** Fixed US import fees — CBP's published formulas, adjusted annually. */
 export const FEES = {
-  mpf: { rate: 0.003464, min_usd: 33.58, max_usd: 651.5, note: "Merchandise Processing Fee FY2025 — kiểm tra mức min/max hiện hành tại cbp.gov trước quyết định cuối" },
-  hmf: { rate: 0.00125, note: "Harbor Maintenance Fee — chỉ áp cho hàng đường biển, không min/max" },
+  mpf: { rate: 0.003464, min_usd: 33.58, max_usd: 651.5, note: "Merchandise Processing Fee FY2025 — verify current min/max at cbp.gov before final decisions" },
+  hmf: { rate: 0.00125, note: "Harbor Maintenance Fee — ocean shipments only, no min/max" },
 };
 
-/** Rule ch99 được footnote của chính dòng thuế trỏ tới ("See 9903.88.03.") — chính xác hơn match tên nước. */
+/** Chapter 99 rules referenced by the rate line's own footnotes ("See 9903.88.03.") — more precise than country-name matching. */
 export function ch99FromFootnotes(e: HtsEntry): HtsEntry[] {
   const refs = new Set<string>();
   for (const f of e.footnotes ?? []) {
@@ -151,7 +153,7 @@ export function ch99FromFootnotes(e: HtsEntry): HtsEntry[] {
   return ch99.filter((c) => [...refs].some((r) => c.htsno.startsWith(r)));
 }
 
-// ---- Watchlist + diff giữa 2 lần fetch (trục subscription) ----
+// ---- Watchlist + diff between two fetches (the change-tracking axis) ----
 
 const WATCHLIST_FILE = process.env.HTS_WATCHLIST_FILE ?? join(ROOT, "data", "watchlist.json");
 export type WatchItem = { hts_code: string; origin?: string; added: string };
@@ -165,7 +167,7 @@ export function saveWatchlist(items: WatchItem[]): void {
 
 export type RateChange = { htsno: string; field: string; old: string; new: string };
 
-/** So sánh bản hiện tại với bản fetch trước (hts_full.prev.json). null = chưa có mốc cũ. */
+/** Compare the current snapshot with the previous fetch (hts_full.prev.json). null = no earlier baseline. */
 export function diffRates(codes?: string[]): { prev_date: string; changes: RateChange[] } | null {
   let prev: Dump;
   try {
@@ -180,16 +182,16 @@ export function diffRates(codes?: string[]): { prev_date: string; changes: RateC
   for (const r of dump.rows) {
     if (!r.htsno || !inScope(r.htsno)) continue;
     const p = prevMap.get(r.htsno);
-    if (!p) { changes.push({ htsno: r.htsno, field: "(dòng mới)", old: "", new: r.general || r.description?.slice(0, 60) || "" }); continue; }
+    if (!p) { changes.push({ htsno: r.htsno, field: "(new line)", old: "", new: r.general || r.description?.slice(0, 60) || "" }); continue; }
     for (const f of FIELDS) {
       const a = (p[f] ?? "") || ""; const b = (r[f] ?? "") || "";
       if (a !== b) changes.push({ htsno: r.htsno, field: f, old: String(a), new: String(b) });
     }
   }
-  // dòng bị XÓA khỏi HTS — quan trọng không kém dòng đổi thuế (review agy 18/08)
+  // lines REMOVED from the HTS — every bit as important as changed rates
   for (const [h, p] of prevMap) {
     if (!curSet.has(h) && inScope(h))
-      changes.push({ htsno: h, field: "(dòng bị xóa)", old: p.general || p.description?.slice(0, 60) || "", new: "" });
+      changes.push({ htsno: h, field: "(line removed)", old: p.general || p.description?.slice(0, 60) || "", new: "" });
   }
   return { prev_date: prev.fetched_at, changes };
 }

@@ -35,6 +35,8 @@ Or in any MCP client config:
 { "mcpServers": { "tariff-resolver": { "command": "npx", "args": ["-y", "tariff-resolver"] } } }
 ```
 
+**Claude Desktop (one-click):** download `tariff-resolver-<version>.mcpb` from [Releases](https://github.com/opsloft/tariff-resolver/releases) and double-click it — no terminal needed.
+
 ## 💡 Try these prompts
 
 - **Basic search:** *"Find the HTS code for a men's 100% cotton t-shirt."*
@@ -65,6 +67,18 @@ python3 scripts/fetch_hts.py   # ~2 min, fails hard rather than write a partial 
 ```
 
 `dataset_info` reports the revision date your queries run against.
+
+## Privacy Policy
+
+tariff-resolver runs entirely on your machine and collects nothing:
+
+- **Data collection**: none. No queries, telemetry, analytics, or usage data are collected or transmitted.
+- **Usage and storage**: your watchlist is stored in a local JSON file on your machine; all lookups run against the bundled local dataset.
+- **Third-party sharing**: none. The server makes no network requests at runtime. (The optional `scripts/fetch_hts.py` refresh script contacts only the official USITC API.)
+- **Data retention**: nothing to retain — delete the local watchlist file at any time.
+- **Contact**: tom@opsloft.dev
+
+Full policy: <https://opsloft.dev/privacy>
 
 ## License
 

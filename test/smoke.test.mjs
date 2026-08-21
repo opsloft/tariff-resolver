@@ -77,10 +77,10 @@ test("MCP server over stdio: tools/list + one real call per tool", async () => {
     );
 
     const watch = await callTool(5, "watch_tariff_changes", { hts_codes: ["6109.10.00", "0000.00.00"] });
-    assert.match(watch, /Tổng watchlist: 1 mã/);
+    assert.match(watch, /Watchlist total: 1 code/);
 
     const updates = await callTool(6, "check_tariff_updates", {});
-    assert.match(updates, /Chưa có bản dataset trước|So sánh/);
+    assert.match(updates, /No previous dataset|Comparing/);
 
     const info = await callTool(7, "dataset_info", {});
     assert.match(info, /total_rows/);
