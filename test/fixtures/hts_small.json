@@ -1,20 +1,206 @@
 {
-  "fetched_at": "2026-08-18",
-  "source": "USITC test fixture (hand-built subset)",
-  "license": "US Government public domain",
-  "rows": [
-    { "htsno": "6601", "indent": "0", "description": "Umbrellas and sun umbrellas:", "superior": null, "units": [], "general": "", "special": "", "other": "", "footnotes": null, "quotaQuantity": null, "additionalDuties": null },
-    { "htsno": "6601.10.00", "indent": "1", "description": "Garden or similar umbrellas", "superior": null, "units": ["No."], "general": "6.5%", "special": "Free (A+,AU,BH)", "other": "40%", "footnotes": null, "quotaQuantity": null, "additionalDuties": null },
-    { "htsno": "6601.10.00.10", "indent": "2", "description": "Golf umbrellas", "superior": null, "units": ["No."], "general": "", "special": "", "other": "", "footnotes": null, "quotaQuantity": null, "additionalDuties": null },
-    { "htsno": "6601.99.00", "indent": "1", "description": "Other umbrellas:", "superior": null, "units": [], "general": "", "special": "", "other": "", "footnotes": null, "quotaQuantity": null, "additionalDuties": null },
-    { "htsno": "6109", "indent": "0", "description": "T-shirts, singlets, tank tops and similar garments, knitted or crocheted:", "superior": null, "units": [], "general": "", "special": "", "other": "", "footnotes": null, "quotaQuantity": null, "additionalDuties": null },
-    { "htsno": "6109.10.00", "indent": "1", "description": "Of cotton", "superior": null, "units": ["doz.", "kg"], "general": "16.5%", "special": "Free (AU,BH,CL)", "other": "90%", "footnotes": [{ "columns": ["general"], "value": "See 9903.88.15." }], "quotaQuantity": null, "additionalDuties": null },
-    { "htsno": "6109.90.10", "indent": "1", "description": "Of man-made fibers", "superior": null, "units": ["doz.", "kg"], "general": "32%", "special": "", "other": "90%", "footnotes": null, "quotaQuantity": null, "additionalDuties": null },
-    { "htsno": "9903.88.03", "indent": "0", "description": "Articles the product of China, as provided for in U.S. note 20(e) to this subchapter", "superior": null, "units": [], "general": "The duty provided in the applicable subheading + 25%", "special": "", "other": "", "footnotes": null, "quotaQuantity": null, "additionalDuties": null },
-    { "htsno": "9903.88.15", "indent": "0", "description": "Articles the product of China, as provided for in U.S. note 20(r) to this subchapter", "superior": null, "units": [], "general": "The duty provided in the applicable subheading + 7.5%", "special": "", "other": "", "footnotes": null, "quotaQuantity": null, "additionalDuties": null },
-    { "htsno": "9903.01.25", "indent": "0", "description": "Articles the product of any country, except for products described in headings 9903.01.26-9903.01.33", "superior": null, "units": [], "general": "The duty provided in the applicable subheading + 10%", "special": "", "other": "", "footnotes": null, "quotaQuantity": null, "additionalDuties": null },
-    { "htsno": "9903.72.01", "indent": "0", "description": "Articles of any country subject to additional duties (provision terminated)", "superior": null, "units": [], "general": "", "special": "", "other": "", "footnotes": null, "quotaQuantity": null, "additionalDuties": null },
-    { "htsno": "9903.88.99", "indent": "0", "description": "Products of Hong Kong subject to additional duties + 15%", "superior": null, "units": [], "general": "The duty provided in the applicable subheading + 15%", "special": "", "other": "", "footnotes": null, "quotaQuantity": null, "additionalDuties": null },
-    { "htsno": "9903.02.69", "indent": "0", "description": "Articles the product of Vietnam, as provided for in this subchapter + 20%", "superior": null, "units": [], "general": "The duty provided in the applicable subheading + 20%", "special": "", "other": "", "footnotes": null, "quotaQuantity": null, "additionalDuties": null }
-  ]
+ "fetched_at": "2026-08-18",
+ "source": "USITC test fixture (hand-built subset)",
+ "license": "US Government public domain",
+ "rows": [
+  {
+   "htsno": "6601",
+   "indent": "0",
+   "description": "Umbrellas and sun umbrellas:",
+   "superior": null,
+   "units": [],
+   "general": "",
+   "special": "",
+   "other": "",
+   "footnotes": null,
+   "quotaQuantity": null,
+   "additionalDuties": null
+  },
+  {
+   "htsno": "6601.10.00",
+   "indent": "1",
+   "description": "Garden or similar umbrellas",
+   "superior": null,
+   "units": [
+    "No."
+   ],
+   "general": "6.5%",
+   "special": "Free (A+,AU,BH)",
+   "other": "40%",
+   "footnotes": null,
+   "quotaQuantity": null,
+   "additionalDuties": null
+  },
+  {
+   "htsno": "6601.10.00.10",
+   "indent": "2",
+   "description": "Golf umbrellas",
+   "superior": null,
+   "units": [
+    "No."
+   ],
+   "general": "",
+   "special": "",
+   "other": "",
+   "footnotes": null,
+   "quotaQuantity": null,
+   "additionalDuties": null
+  },
+  {
+   "htsno": "6601.99.00",
+   "indent": "1",
+   "description": "Other umbrellas:",
+   "superior": null,
+   "units": [],
+   "general": "",
+   "special": "",
+   "other": "",
+   "footnotes": null,
+   "quotaQuantity": null,
+   "additionalDuties": null
+  },
+  {
+   "htsno": "6109",
+   "indent": "0",
+   "description": "T-shirts, singlets, tank tops and similar garments, knitted or crocheted:",
+   "superior": null,
+   "units": [],
+   "general": "",
+   "special": "",
+   "other": "",
+   "footnotes": null,
+   "quotaQuantity": null,
+   "additionalDuties": null
+  },
+  {
+   "htsno": "6109.10.00",
+   "indent": "1",
+   "description": "Of cotton",
+   "superior": null,
+   "units": [
+    "doz.",
+    "kg"
+   ],
+   "general": "16.5%",
+   "special": "Free (AU,BH,CL)",
+   "other": "90%",
+   "footnotes": [
+    {
+     "columns": [
+      "general"
+     ],
+     "value": "See 9903.88.15."
+    }
+   ],
+   "quotaQuantity": null,
+   "additionalDuties": null
+  },
+  {
+   "htsno": "6109.90.10",
+   "indent": "1",
+   "description": "Of man-made fibers",
+   "superior": null,
+   "units": [
+    "doz.",
+    "kg"
+   ],
+   "general": "32%",
+   "special": "",
+   "other": "90%",
+   "footnotes": null,
+   "quotaQuantity": null,
+   "additionalDuties": null
+  },
+  {
+   "htsno": "9903.88.03",
+   "indent": "0",
+   "description": "Articles the product of China, as provided for in U.S. note 20(e) to this subchapter",
+   "superior": null,
+   "units": [],
+   "general": "The duty provided in the applicable subheading + 25%",
+   "special": "",
+   "other": "",
+   "footnotes": null,
+   "quotaQuantity": null,
+   "additionalDuties": null
+  },
+  {
+   "htsno": "9903.88.15",
+   "indent": "0",
+   "description": "Articles the product of China, as provided for in U.S. note 20(r) to this subchapter",
+   "superior": null,
+   "units": [],
+   "general": "The duty provided in the applicable subheading + 7.5%",
+   "special": "",
+   "other": "",
+   "footnotes": null,
+   "quotaQuantity": null,
+   "additionalDuties": null
+  },
+  {
+   "htsno": "9903.01.25",
+   "indent": "0",
+   "description": "Articles the product of any country, except for products described in headings 9903.01.26-9903.01.33",
+   "superior": null,
+   "units": [],
+   "general": "The duty provided in the applicable subheading + 10%",
+   "special": "",
+   "other": "",
+   "footnotes": null,
+   "quotaQuantity": null,
+   "additionalDuties": null
+  },
+  {
+   "htsno": "9903.72.01",
+   "indent": "0",
+   "description": "Articles of any country subject to additional duties (provision terminated)",
+   "superior": null,
+   "units": [],
+   "general": "",
+   "special": "",
+   "other": "",
+   "footnotes": null,
+   "quotaQuantity": null,
+   "additionalDuties": null
+  },
+  {
+   "htsno": "9903.88.99",
+   "indent": "0",
+   "description": "Products of Hong Kong subject to additional duties + 15%",
+   "superior": null,
+   "units": [],
+   "general": "The duty provided in the applicable subheading + 15%",
+   "special": "",
+   "other": "",
+   "footnotes": null,
+   "quotaQuantity": null,
+   "additionalDuties": null
+  },
+  {
+   "htsno": "9903.02.69",
+   "indent": "0",
+   "description": "Articles the product of Vietnam, as provided for in this subchapter + 20%",
+   "superior": null,
+   "units": [],
+   "general": "The duty provided in the applicable subheading + 20%",
+   "special": "",
+   "other": "",
+   "footnotes": null,
+   "quotaQuantity": null,
+   "additionalDuties": null
+  },
+  {
+   "htsno": "9903.72.02",
+   "indent": "0",
+   "description": "Articles the product of any country [Compiler's note: provision suspended. See 90 Fed. Reg. 50729.]",
+   "superior": null,
+   "units": [],
+   "general": "34%",
+   "special": "",
+   "other": "",
+   "footnotes": null,
+   "quotaQuantity": null,
+   "additionalDuties": null
+  }
+ ]
 }

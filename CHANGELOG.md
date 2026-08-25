@@ -4,6 +4,19 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] — 2026-08-25
+
+Correctness release. A public worked example (a synthetic hoodie, 6110.30.30 from China) showed that naively totalling every Chapter 99 heading the schedule prints returns a rate far above what an entry is actually assessed at. Two causes, both now addressed.
+
+### Fixed
+
+- **Suspended provisions were treated as live.** The dead-heading filter only matched "provision terminated" / "no longer in effect" / "provision has expired". Headings marked "provision suspended", "provision was terminated on …", or "expired at the close of …" slipped through — including one carrying a 34% adder. All four wordings are now filtered.
+
+### Added
+
+- `compiler_note` on every Chapter 99 rule that carries one, so the model sees the USITC's own annotation verbatim instead of only the rate.
+- `stacking_warning` and `schedule_snapshot_date` on every `calculate_tariff_scenario` result: the schedule is wrong in **both** directions — provisions whose collection has stopped keep printing with no end date (IEEPA and Section 122 headings are the recurring case), and newly proclaimed actions land in the schedule days after they take effect. The model is told not to total the layers blindly, to report which layers it applied and which it dropped, and to verify collection status against CBP CSMS.
+
 ## [1.0.2] — 2026-08-21
 
 ### Changed

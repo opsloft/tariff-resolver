@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "tariff-resolver",
   "display_name": "Tariff Resolver — US Import Duties",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "US import duty research: HTS code candidates, Chapter 99 additional duties, MPF/HMF fees, and landed-cost components from official USITC data.",
   "long_description": "Turns Claude into a US import duty research tool, built on the official USITC Harmonized Tariff Schedule (US Government public domain, 35,000+ tariff lines).\n\n- HTS code candidates from plain product descriptions, with CBP CROSS ruling links\n- Landed-cost components: MFN/FTA base rates + Chapter 99 additional duties (IEEPA / Section 301 / 232) + MPF/HMF fees\n- Tariff change tracking: watchlist your HTS codes, diff rates between HTS revisions\n- Hallucination-resistant: returns the actual Chapter 99 rule text with parsed rates, so Claude reasons over real exception chains instead of inventing outdated numbers\n\nNot affiliated with any government agency. Outputs are candidates/estimates for pre-broker screening — not customs, legal, or tax advice. Estimates exclude AD/CVD duties.",
   "author": {

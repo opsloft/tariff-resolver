@@ -29,7 +29,17 @@ export type HtsEntry = HtsRow & {
 type Dump = { fetched_at: string; source: string; license: string; rows: HtsRow[] };
 const dump: Dump = JSON.parse(readFileSync(DATA_FILE, "utf8"));
 
-const TERMINATED_RX = /provision (?:is )?terminated|no longer in effect|provision has expired/i;
+// Matches the schedule's own "this heading is dead" markers. Broadened after a
+// public example (Shopify Community, Aug 2026) showed suspended/was-terminated
+// wordings slipping through: 9903.01.63 carries "+34%" behind "provision suspended".
+const TERMINATED_RX =
+  /provision (?:is |was )?(?:terminated|suspended)|no longer in effect|provision has expired|expired at the close/i;
+
+/** The bracketed "[Compiler's note: ...]" the USITC prints on some Chapter 99 headings. */
+export function compilerNote(e: { path: string }): string | null {
+  const m = e.path.match(/\[Compiler's note:\s*([^\]]+)\]/i);
+  return m ? m[1].trim() : null;
+}
 
 export const entries: HtsEntry[] = [];
 {

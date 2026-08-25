@@ -74,11 +74,21 @@ test("ch99Universal returns any-country rules and filters terminated provisions"
   const uni = data.ch99Universal().map((e) => e.htsno);
   assert.ok(uni.includes("9903.01.25"));
   assert.ok(!uni.includes("9903.72.01")); // terminated
+  assert.ok(!uni.includes("9903.72.02")); // suspended — carries a 34% adder, must not surface
 });
 
 test("terminated flag is derived from the compiler's note text", () => {
   assert.equal(data.entries.find((e) => e.htsno === "9903.72.01").terminated, true);
   assert.equal(data.entries.find((e) => e.htsno === "9903.01.25").terminated, false);
+});
+
+// A suspended heading reads as live everywhere except the compiler's note, and the
+// live example that prompted this (9903.01.63) carries +34%.
+test("suspended provisions count as dead, and the note is exposed to the model", () => {
+  const susp = data.entries.find((e) => e.htsno === "9903.72.02");
+  assert.equal(susp.terminated, true);
+  assert.match(data.compilerNote(susp), /provision suspended/i);
+  assert.equal(data.compilerNote(data.entries.find((e) => e.htsno === "9903.01.25")), null);
 });
 
 test("parseAdderPct reads '+ N%' rules and rejects others", () => {
@@ -146,7 +156,7 @@ test("diffRates reports changed, added, and deleted lines, with code scoping", (
 });
 
 test("DATASET_INFO reflects the loaded fixture", () => {
-  assert.equal(data.DATASET_INFO.total_rows, 13);
+  assert.equal(data.DATASET_INFO.total_rows, 14);
   assert.equal(data.DATASET_INFO.fetched_at, "2026-08-18");
   assert.ok(data.DATASET_INFO.ch99_rules >= 5);
   assert.equal(data.DATASET_INFO.data_file, FIXTURE);

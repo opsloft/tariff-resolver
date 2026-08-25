@@ -56,7 +56,9 @@ Or in any MCP client config:
 
 ## Design
 
-The server does the **retrieval**; your LLM does the reasoning. Chapter 99 rules are returned verbatim (with parsed `adder_pct` where applicable) so the model reads the actual exception chains instead of trusting a black-box calculation. Rates for 10-digit statistical suffixes inherit from their parent rate line. Terminated provisions are filtered out and counted.
+The server does the **retrieval**; your LLM does the reasoning. Chapter 99 rules are returned verbatim (with parsed `adder_pct` where applicable) so the model reads the actual exception chains instead of trusting a black-box calculation. Rates for 10-digit statistical suffixes inherit from their parent rate line. Headings the schedule marks as dead — terminated, suspended, expired — are filtered out and counted, and the USITC's own `compiler_note` rides along with any rule that carries one.
+
+**What the data cannot tell you.** The published schedule is wrong in both directions at any given moment, so every result carries a `stacking_warning` and the snapshot date. Provisions whose collection has already stopped keep printing with no end date — IEEPA and Section 122 headings are the recurring case — and newly proclaimed actions appear in the schedule days after they take effect. Totalling every layer the schedule prints yields a rate nobody is charged. Treat the layers as candidates, and verify collection status against [CBP CSMS messages](https://content.govdelivery.com/accounts/USDHSCBP/bulletins) before relying on a stack.
 
 ## Data
 

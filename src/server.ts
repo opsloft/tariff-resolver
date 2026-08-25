@@ -9,8 +9,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import {
-  DATASET_INFO, FEES, ch99ForOrigin, ch99FromFootnotes, ch99Universal, diffRates,
-  findByCode, loadWatchlist, parseAdderPct, parseRatePct, saveWatchlist,
+  DATASET_INFO, FEES, ch99ForOrigin, ch99FromFootnotes, ch99Universal, compilerNote,
+  diffRates, findByCode, loadWatchlist, parseAdderPct, parseRatePct, saveWatchlist,
   searchCandidates, type HtsEntry,
 } from "./data.js";
 
@@ -25,15 +25,34 @@ const fmtLine = (e: HtsEntry) =>
     `  source: https://hts.usitc.gov/search?query=${encodeURIComponent(e.htsno)} | classification rulings: https://rulings.cbp.gov/search?term=${encodeURIComponent(e.htsno.slice(0, 7))}`,
   ].filter(Boolean).join("\n");
 
-const ruleObj = (e: HtsEntry) => ({
-  heading: e.htsno,
-  adder_pct: parseAdderPct(e.eff_general || e.general || ""),
-  rate_text: e.eff_general || e.general || "(see description)",
-  rule_verbatim: e.path,
-});
+const ruleObj = (e: HtsEntry) => {
+  const note = compilerNote(e);
+  return {
+    heading: e.htsno,
+    adder_pct: parseAdderPct(e.eff_general || e.general || ""),
+    rate_text: e.eff_general || e.general || "(see description)",
+    rule_verbatim: e.path,
+    ...(note ? { compiler_note: note } : {}),
+  };
+};
+
+/**
+ * The single most dangerous failure mode of this data: the published schedule is
+ * wrong in both directions at any given moment, and nothing in the text says so.
+ * Provisions whose collection has stopped keep printing with no end date, and
+ * newly proclaimed actions land in the schedule days late. Summing every adder_pct
+ * therefore produces a number nobody is charged.
+ */
+const STACKING_WARNING =
+  "DO NOT SUM every adder_pct below. The published schedule is routinely wrong in both directions: " +
+  "(1) provisions whose collection has already stopped keep printing with no end date — IEEPA and " +
+  "Section 122 headings are the recurring example, and only some dead headings carry a compiler_note; " +
+  "(2) newly proclaimed actions appear in the schedule days after they take effect, so a line can look " +
+  "complete and still be short. Treat these as CANDIDATES, read rule_verbatim and compiler_note, and " +
+  "verify current collection status against CBP CSMS messages before relying on any stack.";
 
 export function buildServer(): McpServer {
-  const server = new McpServer({ name: "tariff-resolver", version: "1.0.2" });
+  const server = new McpServer({ name: "tariff-resolver", version: "1.0.3" });
 
   server.registerTool(
     "search_hs_candidates",
@@ -109,7 +128,9 @@ export function buildServer(): McpServer {
           other_candidate_lines: lines.slice(1, 4).map((l) => l.htsno),
         },
         ch99_additional_duties: {
-          note: "The rules below are active CANDIDATES (terminated rules already filtered out). LLM: read rule_verbatim — the 'Except for...' chains decide which rule applies; adder_pct is pre-parsed for stacking, do NOT invent numbers.",
+          note: "The rules below are CANDIDATES (headings the schedule itself marks as dead are filtered out). LLM: read rule_verbatim — the 'Except for...' chains decide which rule applies; adder_pct is pre-parsed, do NOT invent numbers.",
+          stacking_warning: STACKING_WARNING,
+          schedule_snapshot_date: DATASET_INFO.fetched_at,
           terminated_rules_excluded: nTerm,
           linked_by_footnote: linked.map(ruleObj),
           matched_by_origin_name: origin.map(ruleObj),
@@ -124,6 +145,7 @@ export function buildServer(): McpServer {
         quantity: quantity ?? null,
         duty_units: base.units ?? [],
         llm_guidance:
+          "FIRST read ch99_additional_duties.stacking_warning — never total every adder_pct, and tell the user which layers you applied and which you left out and why. " +
           "landed duty ≈ customs_value × (general_mfn.pct + adder_pct of applicable ch99 rules)/100 + mpf + hmf. " +
           "If general_mfn.pct is null the rate is specific/compound (e.g. '12.4¢/kg + 2%') — weight_kg/quantity is needed to compute it; " +
           "if the user hasn't provided them, ASK instead of guessing. For ch99 rules with adder_pct = null, read rate_text — it may be a specific duty. " +
