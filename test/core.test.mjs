@@ -29,6 +29,9 @@ test("citedPrefixes: subheadings, ranges, chapters; ignores 99xx and note refere
   assert.deepEqual(core.citedPrefixes("articles of chapter 87, as provided for in U.S. note 2(s)").sort(), ["87"]);
   assert.deepEqual(core.citedPrefixes("products of headings 7208 through 7211").sort(), ["7208", "7209", "7210", "7211"]);
   assert.deepEqual(core.citedPrefixes("subheadings enumerated in U.S. note 20(b) to this subchapter"), []);
+  assert.deepEqual(core.citedPrefixes("subheadings 8471.30.01 through 8471.30.04").sort(), ["84713001", "84713002", "84713003", "84713004"]);
+  assert.deepEqual(core.citedPrefixes("articles of chapters 84 through 86").sort(), ["84", "85", "86"]);
+  assert.deepEqual(core.citedPrefixes("headings 7211 through 7208").sort(), ["7208", "7211"]);
 });
 
 test("chapterMismatch: cited-but-different drops, cited-and-matching keeps, uncited keeps", () => {

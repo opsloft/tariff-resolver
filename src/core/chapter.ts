@@ -18,8 +18,16 @@ export function citedPrefixes(text: string): string[] {
       if (t === "through" || t === "to" || t === "–" || t === "-") { range = true; continue; }
       const d = t.replace(/\D/g, "");
       if (d.startsWith("99")) { prev = null; range = false; continue; }
-      if (range && prev && prev.length === 4 && d.length === 4) {
-        for (let n = Number(prev) + 1; n < Number(d); n++) out.add(String(n).padStart(4, "0"));
+      if (range && prev && prev.length === d.length) {
+        // USITC ranges are ascending; expand any same-length pair, capped at 1000 intermediates
+        const start = Number(prev);
+        const end = Number(d);
+        if (end > start) {
+          let count = 0;
+          for (let n = start + 1; n < end && count < 1000; n++, count++) {
+            out.add(String(n).padStart(d.length, "0"));
+          }
+        }
       }
       out.add(d);
       prev = d;
@@ -27,9 +35,27 @@ export function citedPrefixes(text: string): string[] {
     }
   }
   for (const m of text.matchAll(CHAP_RX)) {
-    for (const t of m[1].match(/\d{1,2}/g) ?? []) {
+    const toks = m[1].match(/\d{1,2}|through|to|–|-/g) ?? [];
+    let prev: string | null = null;
+    let range = false;
+    for (const t of toks) {
+      if (t === "through" || t === "to" || t === "–" || t === "-") { range = true; continue; }
       const c = t.padStart(2, "0");
+      if (c.startsWith("99")) { prev = null; range = false; continue; }
+      if (range && prev && prev.length === 2 && c.length === 2) {
+        // Expand chapter ranges numerically, skipping 99
+        const start = Number(prev);
+        const end = Number(c);
+        if (end > start) {
+          for (let n = start + 1; n < end; n++) {
+            const ch = String(n).padStart(2, "0");
+            if (!ch.startsWith("99")) out.add(ch);
+          }
+        }
+      }
       if (!c.startsWith("99")) out.add(c);
+      prev = c;
+      range = false;
     }
   }
   return [...out];
