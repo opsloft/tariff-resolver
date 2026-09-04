@@ -4,6 +4,12 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- USITC HTS snapshot refreshed 2026-08-18 → 2026-09-04 (35,804 rows, 3,111 Chapter 99 rules; adds headings 9903.03.12–9903.03.16 that were missing from the earlier snapshot).
+
 ## [1.0.3] — 2026-08-25
 
 Correctness release. A public worked example (a synthetic hoodie, 6110.30.30 from China) showed that naively totalling every Chapter 99 heading the schedule prints returns a rate far above what an entry is actually assessed at. Two causes, both now addressed.
