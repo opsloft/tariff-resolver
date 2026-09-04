@@ -50,3 +50,67 @@ test("findOverride: longest matching prefix wins; null when nothing matches", ()
   assert.equal(core.findOverride(ov, "9903.88.15"), null);
   assert.equal(core.findOverride({ version: "x", entries: [] }, "9903.01.25"), null);
 });
+
+const ds = data.dataset;
+
+test("resolveDuty: happy path on the fixture (cotton tee from China)", () => {
+  const r = core.resolveDuty(ds, { id: "L1", hts: "6109.10.00", origin: "CN", value_usd: 10000, ocean: true });
+  assert.ok(!core.isLineError(r));
+  assert.equal(r.id, "L1");
+  assert.equal(r.hts.code, "6109.10.00");
+  // special_fta / column2 are the schedule's own columns, passed through verbatim; eligibility is the consumer's call
+  assert.deepEqual(r.base, { mfn_pct: 16.5, mfn_text: "16.5%", special_fta: "Free (AU,BH,CL)", column2: "90%", inherited_from_parent: false });
+  assert.deepEqual(r.fees_usd, { mpf: 34.64, hmf: 12.5, hmf_applied: true, fee_year: "FY2026" });
+  const byHeading = Object.fromEntries(r.layers.map((l) => [l.heading, l]));
+  // footnote-linked → enumerated
+  assert.equal(byHeading["9903.88.15"].match, "footnote");
+  assert.equal(byHeading["9903.88.15"].confidence, "enumerated");
+  assert.equal(byHeading["9903.88.15"].adder_pct, 7.5);
+  // origin-name → heuristic
+  assert.equal(byHeading["9903.88.03"].match, "origin_name");
+  assert.equal(byHeading["9903.88.03"].confidence, "heuristic");
+  // unparsable rate → unknown
+  assert.equal(byHeading["9903.05.31"].confidence, "unknown");
+  assert.equal(byHeading["9903.05.31"].adder_pct, null);
+  // chapter filter: tire heading (cites 4011.*) must not appear anywhere
+  assert.ok(!("9903.40.05" in byHeading));
+  assert.ok(!r.possibly_expired.some((l) => l.heading === "9903.40.05"));
+  assert.equal(r.excluded.chapter_mismatch, 1);
+  // overrides: 9903.01.25 moves to possibly_expired with the fixture's most specific entry
+  assert.ok(!("9903.01.25" in byHeading));
+  const exp = r.possibly_expired.find((l) => l.heading === "9903.01.25");
+  assert.equal(exp.status, "expired");
+  assert.equal(exp.match, "universal");
+  assert.match(exp.reason, /more specific/);
+  assert.equal(exp.as_of, "2026-03-01");
+  // terminated headings are counted, never listed
+  assert.ok(r.excluded.terminated >= 1);
+  assert.deepEqual(r.schedule, { snapshot_date: "2026-08-18", overrides_version: "fixture-2026-09-04" });
+  assert.deepEqual(r.warnings, ["do_not_sum_layers", "excludes_ad_cvd"]);
+  assert.match(r.disclaimer, /not customs advice/i);
+});
+
+test("resolveDuty: fees are null without value_usd; hmf 0 when not ocean", () => {
+  const a = core.resolveDuty(ds, { hts: "6109.10.00", origin: "China" });
+  assert.equal(a.fees_usd, null);
+  const b = core.resolveDuty(ds, { hts: "6109.10.00", origin: "China", value_usd: 100 });
+  assert.deepEqual(b.fees_usd, { mpf: 33.58, hmf: 0, hmf_applied: false, fee_year: "FY2026" });
+});
+
+test("resolveDuty: error lines carry the id and never throw", () => {
+  assert.deepEqual(core.resolveDuty(ds, { id: "x", hts: "0000.00.00", origin: "CN" }),
+    { id: "x", error: { code: "HTS_NOT_FOUND", message: "HTS 0000.00.00 is not in the schedule snapshot 2026-08-18" } });
+  assert.equal(core.resolveDuty(ds, { hts: "6109.10.00", origin: "ZZ" }).error.code, "ORIGIN_UNKNOWN");
+  assert.equal(core.resolveDuty(ds, { hts: 42, origin: "CN" }).error.code, "INVALID_LINE");
+  assert.equal(core.resolveDuty(ds, null).error.code, "INVALID_LINE");
+  assert.ok(core.isLineError(core.resolveDuty(ds, null)));
+});
+
+test("resolveDuty: Vietnam sees its own heading and no China layers", () => {
+  const r = core.resolveDuty(ds, { hts: "6109.10.00", origin: "VN" });
+  const headings = r.layers.map((l) => l.heading);
+  assert.ok(headings.includes("9903.02.69"));
+  assert.ok(!headings.includes("9903.88.03"));
+  // footnote link is not origin-specific: the schedule's own "See 9903.88.15." still surfaces
+  assert.ok(headings.includes("9903.88.15"));
+});
