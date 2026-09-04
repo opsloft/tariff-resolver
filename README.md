@@ -58,6 +58,8 @@ Or in any MCP client config:
 
 The server does the **retrieval**; your LLM does the reasoning. Chapter 99 rules are returned verbatim (with parsed `adder_pct` where applicable) so the model reads the actual exception chains instead of trusting a black-box calculation. Rates for 10-digit statistical suffixes inherit from their parent rate line. Headings the schedule marks as dead — terminated, suspended, expired — are filtered out and counted, and the USITC's own `compiler_note` rides along with any rule that carries one.
 
+**Status overrides.** `data/status_overrides.json` is a short, sourced list of Chapter 99 headings whose collection has stopped, expired, or been suspended even though the schedule still prints them. A layer matching an entry is returned under `possibly_expired` with the entry's `status`, `reason`, `source` URL and `as_of` date instead of in `layers`. Every entry carries a CBP, Federal Register or USITC source; pull requests adding entries must include one.
+
 **What the data cannot tell you.** The published schedule is wrong in both directions at any given moment, so every result carries a `stacking_warning` and the snapshot date. Provisions whose collection has already stopped keep printing with no end date — IEEPA and Section 122 headings are the recurring case — and newly proclaimed actions appear in the schedule days after they take effect. Totalling every layer the schedule prints yields a rate nobody is charged. Treat the layers as candidates, and verify collection status against [CBP CSMS messages](https://content.govdelivery.com/accounts/USDHSCBP/bulletins) before relying on a stack.
 
 ## Data

@@ -120,3 +120,16 @@ test("ch99UniversalAll: unlimited by default (includes dead headings), limit sti
   assert.deepEqual(all, ["9903.01.25", "9903.72.01", "9903.72.02"]);
   assert.equal(core.ch99UniversalAll(ds, 2).length, 2);
 });
+
+test("real status_overrides.json: valid schema and every entry has a URL source", async () => {
+  const { readFileSync } = await import("node:fs");
+  const real = JSON.parse(readFileSync(join(HERE, "..", "data", "status_overrides.json"), "utf8"));
+  assert.match(real.version, /^\d{4}-\d{2}-\d{2}$/);
+  for (const e of real.entries) {
+    assert.match(e.match, /^99\d{2}\.\d{2}(\.\d{1,2})?$|^99\d{2}\.\d{2}\.\d$|^99\d{2}\.\d{2}\.\d{2}$/);
+    assert.ok(["collection_stopped", "expired", "suspended"].includes(e.status));
+    assert.ok(e.reason.length > 20);
+    assert.match(e.source, /^https:\/\/(www\.)?(cbp\.gov|content\.govdelivery\.com|federalregister\.gov|hts\.usitc\.gov|usitc\.gov)\//);
+    assert.match(e.as_of, /^\d{4}-\d{2}-\d{2}$/);
+  }
+});

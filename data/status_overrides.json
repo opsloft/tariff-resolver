@@ -1,4 +1,250 @@
 {
   "version": "2026-09-04",
-  "entries": []
+  "entries": [
+    {
+      "match": "9903.01.0",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.01.01-9903.01.05 are the IEEPA Mexico lines under EO 14194 (CBP IEEPA FAQ).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.01.1",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.01.10-9903.01.16 are the IEEPA Canada lines under EO 14193 (CBP CSMS #65798609).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.01.2",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.01.20-9903.01.24 are the IEEPA China/Hong Kong lines under EO 14195 and 9903.01.25-9903.01.29 are IEEPA reciprocal lines under EO 14257 (CBP IEEPA FAQ).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.01.3",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.01.30-9903.01.34 are IEEPA reciprocal exception lines under EO 14257 (CBP IEEPA FAQ).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.01.7",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.01.77-9903.01.79 are the IEEPA Brazil lines under EO 14323 (CBP CSMS #65807735).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.01.8",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.01.80-9903.01.83 are the IEEPA Brazil lines under EO 14323 (CBP CSMS #65807735).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.01.9",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; heading 9903.01.90 is an IEEPA Brazil line under EO 14323 as modified on Nov. 20, 2025 (CBP CSMS #66871909).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.02.02",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; heading 9903.02.02 is an IEEPA reciprocal line under EO 14257 (CBP CSMS #65829726 places 9903.02.02-9903.02.71 under the reciprocal tariffs).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.02.03",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; heading 9903.02.03 is an IEEPA reciprocal line under EO 14257 (CBP CSMS #65829726 places 9903.02.02-9903.02.71 under the reciprocal tariffs).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.02.04",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; heading 9903.02.04 is an IEEPA reciprocal line under EO 14257 (CBP CSMS #65829726 places 9903.02.02-9903.02.71 under the reciprocal tariffs).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.02.05",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; heading 9903.02.05 is an IEEPA reciprocal line under EO 14257 (CBP CSMS #65829726 places 9903.02.02-9903.02.71 under the reciprocal tariffs).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.02.06",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; heading 9903.02.06 is an IEEPA reciprocal line under EO 14257 (CBP CSMS #65829726 places 9903.02.02-9903.02.71 under the reciprocal tariffs).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.02.07",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; heading 9903.02.07 is an IEEPA reciprocal line under EO 14257 (CBP CSMS #65829726 places 9903.02.02-9903.02.71 under the reciprocal tariffs).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.02.08",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; heading 9903.02.08 is an IEEPA reciprocal line under EO 14257 (CBP CSMS #65829726 places 9903.02.02-9903.02.71 under the reciprocal tariffs).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.02.09",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; heading 9903.02.09 is an IEEPA reciprocal line under EO 14257 (CBP CSMS #65829726 places 9903.02.02-9903.02.71 under the reciprocal tariffs).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.02.1",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.02.10-9903.02.19 are IEEPA reciprocal lines under EO 14257 (CBP CSMS #65829726 places 9903.02.02-9903.02.71 under the reciprocal tariffs).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.02.2",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.02.20-9903.02.29 are IEEPA reciprocal lines under EO 14257 (CBP CSMS #65829726 places 9903.02.02-9903.02.71 under the reciprocal tariffs).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.02.3",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.02.30-9903.02.39 are IEEPA reciprocal lines under EO 14257 (CBP CSMS #65829726 places 9903.02.02-9903.02.71 under the reciprocal tariffs).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.02.4",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.02.40-9903.02.49 are IEEPA reciprocal lines under EO 14257 (CBP CSMS #65829726 places 9903.02.02-9903.02.71 under the reciprocal tariffs).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.02.5",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.02.50-9903.02.59 are IEEPA reciprocal lines under EO 14257 (CBP CSMS #65829726 places 9903.02.02-9903.02.71 under the reciprocal tariffs).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.02.6",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.02.60-9903.02.69 are IEEPA reciprocal lines under EO 14257 (CBP CSMS #65829726 places 9903.02.02-9903.02.71 under the reciprocal tariffs).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.02.7",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.02.70-9903.02.79 are IEEPA reciprocal lines under EO 14257 (CBP CSMS #65829726 and CBP CSMS #66336270; USITC HTS chapter 99 U.S. note 2(v) groups 9903.02.01-9903.02.91 as one reciprocal action).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.02.8",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.02.80-9903.02.89 are IEEPA reciprocal lines under EO 14257 (CBP CSMS #67133044; USITC HTS chapter 99 U.S. note 2(v) groups 9903.02.01-9903.02.91 as one reciprocal action).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.02.9",
+      "status": "collection_stopped",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.02.90-9903.02.91 are the IEEPA reciprocal Liechtenstein lines under EO 14257 (CBP CSMS #67133044).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.03.01",
+      "status": "expired",
+      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
+      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "as_of": "2026-07-24"
+    },
+    {
+      "match": "9903.03.02",
+      "status": "expired",
+      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
+      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "as_of": "2026-07-24"
+    },
+    {
+      "match": "9903.03.03",
+      "status": "expired",
+      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
+      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "as_of": "2026-07-24"
+    },
+    {
+      "match": "9903.03.04",
+      "status": "expired",
+      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
+      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "as_of": "2026-07-24"
+    },
+    {
+      "match": "9903.03.05",
+      "status": "expired",
+      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
+      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "as_of": "2026-07-24"
+    },
+    {
+      "match": "9903.03.06",
+      "status": "expired",
+      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
+      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "as_of": "2026-07-24"
+    },
+    {
+      "match": "9903.03.07",
+      "status": "expired",
+      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
+      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "as_of": "2026-07-24"
+    },
+    {
+      "match": "9903.03.08",
+      "status": "expired",
+      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
+      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "as_of": "2026-07-24"
+    },
+    {
+      "match": "9903.03.09",
+      "status": "expired",
+      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
+      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "as_of": "2026-07-24"
+    },
+    {
+      "match": "9903.03.10",
+      "status": "expired",
+      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
+      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "as_of": "2026-07-24"
+    },
+    {
+      "match": "9903.03.11",
+      "status": "expired",
+      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
+      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "as_of": "2026-07-24"
+    }
+  ]
 }
