@@ -3,6 +3,7 @@
  * No Node APIs — this file also runs inside a Cloudflare Worker bundle.
  */
 import type { Dataset, Dump, HtsEntry, Overrides } from "./types.js";
+import { normalizeOrigin } from "./origin.js";
 
 // Matches the schedule's own "this heading is dead" markers (broadened in 1.0.3).
 const TERMINATED_RX =
@@ -72,17 +73,10 @@ export function findByCode(ds: Dataset, code: string): HtsEntry[] {
   return ds.rateLines.filter((e) => e.htsno.replace(/\D/g, "").startsWith(digits)).slice(0, 10);
 }
 
-const ORIGIN_ALIASES: Record<string, string[]> = {
-  china: ["china", "hong kong", "macau"],
-  "united kingdom": ["united kingdom", "uk"],
-  "south korea": ["korea"],
-  vietnam: ["vietnam", "viet nam"],
-};
-
 /** Chapter 99 headings whose text names the origin (raw candidates; the caller decides). */
 export function ch99ForOrigin(ds: Dataset, origin: string, limit = 25): HtsEntry[] {
-  const o = origin.trim().toLowerCase();
-  return ch99ForNeedles(ds, ORIGIN_ALIASES[o] ?? [o], limit);
+  const o = normalizeOrigin(origin);
+  return o ? ch99ForNeedles(ds, o.needles, limit) : [];
 }
 
 export function ch99ForNeedles(ds: Dataset, needles: string[], limit = 25): HtsEntry[] {
