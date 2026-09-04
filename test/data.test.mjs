@@ -156,7 +156,7 @@ test("diffRates reports changed, added, and deleted lines, with code scoping", (
 });
 
 test("DATASET_INFO reflects the loaded fixture", () => {
-  assert.equal(data.DATASET_INFO.total_rows, 14);
+  assert.equal(data.DATASET_INFO.total_rows, 16);
   assert.equal(data.DATASET_INFO.fetched_at, "2026-08-18");
   assert.ok(data.DATASET_INFO.ch99_rules >= 5);
   assert.equal(data.DATASET_INFO.data_file, FIXTURE);

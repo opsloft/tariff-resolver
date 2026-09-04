@@ -20,3 +20,21 @@ test("normalizeOrigin: ISO-2, names, aliases, unknown", () => {
   assert.equal(core.normalizeOrigin("ZZ"), null);
   assert.equal(core.normalizeOrigin(""), null);
 });
+
+test("citedPrefixes: subheadings, ranges, chapters; ignores 99xx and note references", () => {
+  const tires = data.entries.find((e) => e.htsno === "9903.40.05").path;
+  assert.deepEqual(core.citedPrefixes(tires).sort(), ["40111010", "40112010"]);
+  const ieepa = data.entries.find((e) => e.htsno === "9903.01.25").path;
+  assert.deepEqual(core.citedPrefixes(ieepa), []);
+  assert.deepEqual(core.citedPrefixes("articles of chapter 87, as provided for in U.S. note 2(s)").sort(), ["87"]);
+  assert.deepEqual(core.citedPrefixes("products of headings 7208 through 7211").sort(), ["7208", "7209", "7210", "7211"]);
+  assert.deepEqual(core.citedPrefixes("subheadings enumerated in U.S. note 20(b) to this subchapter"), []);
+});
+
+test("chapterMismatch: cited-but-different drops, cited-and-matching keeps, uncited keeps", () => {
+  const tires = data.entries.find((e) => e.htsno === "9903.40.05").path;
+  assert.equal(core.chapterMismatch(tires, "61091000"), true);
+  assert.equal(core.chapterMismatch(tires, "40111010"), false);
+  assert.equal(core.chapterMismatch("articles of chapter 61", "61091000"), false);
+  assert.equal(core.chapterMismatch(data.entries.find((e) => e.htsno === "9903.01.25").path, "61091000"), false);
+});
