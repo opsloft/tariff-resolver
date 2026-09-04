@@ -81,7 +81,7 @@ export function buildServer(): McpServer {
         "the right duty layers, explain each step to the user, and always note this is an estimate.",
       inputSchema: {
         hts_code: z.string().describe("8-10 digit HTS code, with or without dots"),
-        origin_country: z.string().describe("Country of origin (English name, e.g. 'China', 'Vietnam', 'Mexico')"),
+        origin_country: z.string().describe("Country of origin: ISO-3166 alpha-2 code (e.g. 'CN') or English country name (e.g. 'China')"),
         customs_value_usd: z.number().positive().describe("Customs value of the shipment (USD)"),
         ocean_freight: z.boolean().default(false).describe("Ocean shipment? (applies HMF)"),
         weight_kg: z.number().positive().optional().describe("Total weight (kg) — REQUIRED when the code carries a specific duty per kg (e.g. '12.4¢/kg')"),

@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- `calculate_tariff_scenario` now returns the core result plus all 1.0.x fields (additive; existing clients keep working).
+- `calculate_tariff_scenario` now returns the core result plus all 1.0.x fields. New fields are additive, but the 1.0.x candidate buckets (`linked_by_footnote`, `matched_by_origin_name`, `universal_all_countries`) are now filtered: headings with a sourced status override move to `possibly_expired`, and headings that cite other chapters are dropped and counted in `chapter_mismatch_excluded`.
 - USITC HTS snapshot refreshed 2026-08-18 → 2026-09-04 (35,804 rows, 3,111 Chapter 99 rules; adds headings 9903.03.12–9903.03.16 that were missing from the earlier snapshot).
 
 ## [1.0.3] — 2026-08-25

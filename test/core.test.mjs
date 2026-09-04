@@ -36,6 +36,10 @@ test("citedPrefixes: subheadings, ranges, chapters; ignores 99xx and note refere
   assert.deepEqual(core.citedPrefixes("subheadings 8471.30.01 through 8471.30.04").sort(), ["84713001", "84713002", "84713003", "84713004"]);
   assert.deepEqual(core.citedPrefixes("articles of chapters 84 through 86").sort(), ["84", "85", "86"]);
   assert.deepEqual(core.citedPrefixes("headings 7211 through 7208").sort(), ["7208", "7211"]);
+  // a range too wide to enumerate falls back to the endpoints' shared prefix, never a truncated head
+  const wide = core.citedPrefixes("subheadings 8471.30.01 through 8471.60.02");
+  assert.ok(wide.includes("8471") && wide.includes("84713001") && wide.includes("84716002"), JSON.stringify(wide));
+  assert.ok(wide.length <= 3, `wide range should not enumerate: ${JSON.stringify(wide)}`);
 });
 
 test("chapterMismatch: cited-but-different drops, cited-and-matching keeps, uncited keeps", () => {

@@ -1,16 +1,30 @@
 /**
  * The chapter filter — the origin-name false-match filter (design-partner request #1).
  * A Chapter 99 heading that names specific subheadings/headings/chapters only applies to
- * lines under them; a heading that names nothing (IEEPA, Section 301 lists, "any country") applies to whatever matched it.
+ * lines under them; a heading that names nothing (IEEPA, Section 301 lists, "any country")
+ * applies to whatever matched it.
  * Derived from the heading text itself — no curated map.
  */
 const SEG_RX = /\b(?:sub)?headings?\s+((?:\d{4}(?:\.\d{2}){0,3}|through|to|and|or|,|–|-|\s)+)/gi;
 const CHAP_RX = /\bchapters?\s+((?:\d{1,2}\b|through|to|and|or|,|\s)+)/gi;
 
+/** Longest common leading prefix of two same-length digit strings. */
+function commonPrefix(a: string, b: string): string {
+  let i = 0;
+  while (i < a.length && a[i] === b[i]) i++;
+  return a.slice(0, i);
+}
+
+/** Ranges wider than this are covered by their shared prefix instead of being enumerated. */
+const RANGE_CAP = 1000;
+
 /**
  * Shared range-walk helper: processes a token sequence (numbers + range keywords),
  * adds non-99xx numbers to the output set, and expands same-length ascending ranges
- * (up to 1000 intermediates) zero-padded to the endpoint length.
+ * zero-padded to the endpoint length. A range with more than RANGE_CAP intermediates is
+ * not enumerated: the endpoints' longest common leading prefix is added instead, so the
+ * range still covers every member rather than truncating to the first RANGE_CAP and
+ * silently under-covering the tail.
  */
 function walkRange(tokens: string[], out: Set<string>): void {
   let prev: string | null = null;
@@ -19,13 +33,15 @@ function walkRange(tokens: string[], out: Set<string>): void {
     if (t === "through" || t === "to" || t === "–" || t === "-") { range = true; continue; }
     if (t.startsWith("99")) { prev = null; range = false; continue; }
     if (range && prev && prev.length === t.length) {
-      // USITC ranges are ascending; expand any same-length pair, capped at 1000 intermediates
+      // USITC ranges are ascending; expand any same-length pair
       const start = Number(prev);
       const end = Number(t);
       if (end > start) {
-        let count = 0;
-        for (let n = start + 1; n < end && count < 1000; n++, count++) {
-          out.add(String(n).padStart(t.length, "0"));
+        if (end - start - 1 > RANGE_CAP) {
+          const shared = commonPrefix(prev, t);
+          if (shared) out.add(shared); // endpoints share nothing -> cite the endpoints only
+        } else {
+          for (let n = start + 1; n < end; n++) out.add(String(n).padStart(t.length, "0"));
         }
       }
     }
