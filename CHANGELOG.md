@@ -4,10 +4,21 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.1.0] — 2026-09-04
+
+### Added
+
+- Pure core (`tariff-resolver/core`): `buildDataset`, `resolveDuty`, `normalizeOrigin`, `citedPrefixes`, `findOverride` — no Node APIs, runs in edge runtimes. This is the layer behind the hosted REST endpoint.
+- Per-layer `match` (`footnote` / `origin_name` / `universal`) and `confidence` (`enumerated` / `heuristic` / `unknown`).
+- `possibly_expired`: layers whose heading matches a sourced entry in `data/status_overrides.json` are returned separately with `status`, `reason`, `source`, `as_of`.
+- Chapter filter: headings that cite other subheadings/chapters are dropped from lines they cannot apply to; the count is reported in `excluded.chapter_mismatch`.
+- Origins accept ISO-3166 alpha-2 codes.
+- `fees_usd` (separate MPF/HMF, `fee_year`) on every result; MPF figures labelled FY2026.
+- `data/status_overrides.json`: 36 sourced entries (IEEPA headings ended per CBP CSMS #67834313, effective 2026-02-24; Section 122 headings 9903.03.01–.11 expired 2026-07-24 per CSMS #67844987).
 
 ### Changed
 
+- `calculate_tariff_scenario` now returns the core result plus all 1.0.x fields (additive; existing clients keep working).
 - USITC HTS snapshot refreshed 2026-08-18 → 2026-09-04 (35,804 rows, 3,111 Chapter 99 rules; adds headings 9903.03.12–9903.03.16 that were missing from the earlier snapshot).
 
 ## [1.0.3] — 2026-08-25

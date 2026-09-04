@@ -49,7 +49,7 @@ Or in any MCP client config:
 | Tool | What it does |
 |---|---|
 | `search_hs_candidates` | Product description → top HTS candidates with rates + CBP CROSS ruling links |
-| `calculate_tariff_scenario` | HTS code + origin + value (+ weight) → structured JSON: base MFN/FTA rate, **active** Chapter 99 rules (footnote-linked / origin-matched / universal, terminated rules filtered), MPF/HMF |
+| `calculate_tariff_scenario` | HTS code + origin + value (+ weight) → structured JSON: base MFN/FTA rate, candidate Chapter 99 layers with per-layer match/confidence, sourced possibly_expired bucket, MPF/HMF |
 | `watch_tariff_changes` | Register HTS codes to a local watchlist |
 | `check_tariff_updates` | Diff current vs previous HTS revision — see exactly which rates changed |
 | `dataset_info` | Data revision date, row counts, source, license |
@@ -61,6 +61,8 @@ The server does the **retrieval**; your LLM does the reasoning. Chapter 99 rules
 **Status overrides.** `data/status_overrides.json` is a short, sourced list of Chapter 99 headings whose collection has stopped, expired, or been suspended even though the schedule still prints them. A layer matching an entry is returned under `possibly_expired` with the entry's `status`, `reason`, `source` URL and `as_of` date instead of in `layers`. Every entry carries a CBP, Federal Register or USITC source; pull requests adding entries must include one.
 
 **What the data cannot tell you.** The published schedule is wrong in both directions at any given moment, so every result carries a `stacking_warning` and the snapshot date. Provisions whose collection has already stopped keep printing with no end date — IEEPA and Section 122 headings are the recurring case — and newly proclaimed actions appear in the schedule days after they take effect. Totalling every layer the schedule prints yields a rate nobody is charged. Treat the layers as candidates, and verify collection status against [CBP CSMS messages](https://content.govdelivery.com/accounts/USDHSCBP/bulletins) before relying on a stack.
+
+**One core, two front doors.** All duty logic lives in `tariff-resolver/core` (pure TypeScript, no filesystem or network): `resolveDuty(dataset, { hts, origin, value_usd?, ocean? })` returns the base line, separate MPF/HMF, every candidate Chapter 99 layer with `match` and `confidence`, a sourced `possibly_expired` bucket, and the snapshot date. The MCP tool calls it; so can any Node or edge runtime.
 
 ## Data
 

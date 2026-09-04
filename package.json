@@ -49,8 +49,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "test": "node --test test/data.test.mjs test/core.test.mjs test/smoke.test.mjs",
-    "coverage": "c8 node --test test/data.test.mjs test/core.test.mjs test/smoke.test.mjs"
+    "test": "node --test test/data.test.mjs test/core.test.mjs test/golden.test.mjs test/smoke.test.mjs",
+    "coverage": "c8 node --test test/data.test.mjs test/core.test.mjs test/golden.test.mjs test/smoke.test.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
