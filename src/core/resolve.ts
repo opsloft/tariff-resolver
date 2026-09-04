@@ -11,7 +11,7 @@ import { chapterMismatch, citedPrefixes } from "./chapter.js";
 export const DISCLAIMER =
   "Screening estimates, not customs advice. Layers are candidates read from the published schedule; " +
   "verify collection status against CBP CSMS before relying on any stack. Excludes AD/CVD.";
-export const WARNINGS = ["do_not_sum_layers", "excludes_ad_cvd"];
+export const WARNINGS: readonly string[] = Object.freeze(["do_not_sum_layers", "excludes_ad_cvd"]);
 
 export function isLineError(x: LineResult | LineError): x is LineError {
   return (x as LineError).error !== undefined;

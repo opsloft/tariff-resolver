@@ -114,3 +114,9 @@ test("resolveDuty: Vietnam sees its own heading and no China layers", () => {
   // footnote link is not origin-specific: the schedule's own "See 9903.88.15." still surfaces
   assert.ok(headings.includes("9903.88.15"));
 });
+
+test("ch99UniversalAll: unlimited by default (includes dead headings), limit still works", () => {
+  const all = core.ch99UniversalAll(ds).map((e) => e.htsno).sort();
+  assert.deepEqual(all, ["9903.01.25", "9903.72.01", "9903.72.02"]);
+  assert.equal(core.ch99UniversalAll(ds, 2).length, 2);
+});

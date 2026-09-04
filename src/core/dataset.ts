@@ -89,8 +89,11 @@ export function ch99Universal(ds: Dataset, limit = 10): HtsEntry[] {
   return ds.ch99.filter((e) => !e.terminated && rx.test(e.path)).slice(0, limit);
 }
 
-/** Same wording match as ch99Universal but including dead headings, so callers can count them. */
-export function ch99UniversalAll(ds: Dataset, limit = 12): HtsEntry[] {
+/**
+ * Same wording match as ch99Universal but including dead headings, so callers can count them.
+ * Unlimited by default — resolveDuty's chapter filter, not a positional slice, decides relevance.
+ */
+export function ch99UniversalAll(ds: Dataset, limit = Infinity): HtsEntry[] {
   const rx = /all countries|any country|from all|of any country/i;
   return ds.ch99.filter((e) => rx.test(e.path)).slice(0, limit);
 }
