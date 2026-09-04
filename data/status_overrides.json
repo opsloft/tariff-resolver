@@ -32,14 +32,14 @@
     {
       "match": "9903.01.7",
       "status": "collection_stopped",
-      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.01.77-9903.01.79 are the IEEPA Brazil lines under EO 14323 (CBP CSMS #65807735).",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.01.70-9903.01.76 are IEEPA reciprocal Annex I country-rate lines under EO 14257 (the CBP IEEPA FAQ lists 9903.01.25, 9903.01.35, 9903.01.39 and 9903.01.43-9903.01.76 as the reciprocal rate headings) and headings 9903.01.77-9903.01.79 are the IEEPA Brazil lines under EO 14323 (CBP CSMS #65807735).",
       "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
       "as_of": "2026-02-24"
     },
     {
       "match": "9903.01.8",
       "status": "collection_stopped",
-      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.01.80-9903.01.83 are the IEEPA Brazil lines under EO 14323 (CBP CSMS #65807735).",
+      "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; headings 9903.01.80-9903.01.83 are the IEEPA Brazil lines under EO 14323 (CBP CSMS #65807735) and headings 9903.01.84-9903.01.89 are the IEEPA India lines under EO 14329, 'Addressing Threats to the United States by the Government of the Russian Federation' (CBP CSMS #66027027).",
       "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
       "as_of": "2026-02-24"
     },
@@ -47,6 +47,13 @@
       "match": "9903.01.9",
       "status": "collection_stopped",
       "reason": "CBP CSMS #67834313 (Feb. 22, 2026) states that duties imposed pursuant to IEEPA \"will no longer be in effect and will no longer be collected for goods entered for consumption or withdrawn from warehouse for consumption, on or after 12:00 a.m. eastern time on February 24, 2026\" and that all IEEPA HTSUS numbers went inactive in ACE that day; heading 9903.01.90 is an IEEPA Brazil line under EO 14323 as modified on Nov. 20, 2025 (CBP CSMS #66871909).",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.02.01",
+      "status": "collection_stopped",
+      "reason": "Heading 9903.02.01 is the 40% transshipment provision added by Executive Order 14326 (per its USITC compiler's note, \"[Insert EO Number] refers to Executive Order 14326, 90 Fed. Reg. 37963.\"), which amends the IEEPA reciprocal action under EO 14257 that CBP CSMS #67834313 ended \"including all modifications and amendments\" for goods entered for consumption or withdrawn from warehouse for consumption on or after 12:00 a.m. eastern time on February 24, 2026 (CBP CSMS #65829726 attributes 9903.02.02-9903.02.71 to the same EO).",
       "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
       "as_of": "2026-02-24"
     },
@@ -172,78 +179,78 @@
     {
       "match": "9903.03.01",
       "status": "expired",
-      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
-      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "reason": "CBP CSMS #67844987 (\"Imposing Temporary Section 122 Duties\") states that \"For articles that are the product of any country entered for consumption, or withdrawn from warehouse for consumption, on or after 12:01 a.m. eastern standard time on February 24, 2026, and through 12:01 a.m. eastern daylight time on July 24, 2026, the following HTSUS classification and additional duty rate apply under heading 9903.03.01\" and enumerates the exemption headings 9903.03.02 through 9903.03.11, and the USITC HTS chapter 99 compiler's note corroborates that \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\"",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b3b7b",
       "as_of": "2026-07-24"
     },
     {
       "match": "9903.03.02",
       "status": "expired",
-      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
-      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "reason": "CBP CSMS #67844987 (\"Imposing Temporary Section 122 Duties\") states that \"For articles that are the product of any country entered for consumption, or withdrawn from warehouse for consumption, on or after 12:01 a.m. eastern standard time on February 24, 2026, and through 12:01 a.m. eastern daylight time on July 24, 2026, the following HTSUS classification and additional duty rate apply under heading 9903.03.01\" and enumerates the exemption headings 9903.03.02 through 9903.03.11, and the USITC HTS chapter 99 compiler's note corroborates that \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\"",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b3b7b",
       "as_of": "2026-07-24"
     },
     {
       "match": "9903.03.03",
       "status": "expired",
-      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
-      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "reason": "CBP CSMS #67844987 (\"Imposing Temporary Section 122 Duties\") states that \"For articles that are the product of any country entered for consumption, or withdrawn from warehouse for consumption, on or after 12:01 a.m. eastern standard time on February 24, 2026, and through 12:01 a.m. eastern daylight time on July 24, 2026, the following HTSUS classification and additional duty rate apply under heading 9903.03.01\" and enumerates the exemption headings 9903.03.02 through 9903.03.11, and the USITC HTS chapter 99 compiler's note corroborates that \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\"",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b3b7b",
       "as_of": "2026-07-24"
     },
     {
       "match": "9903.03.04",
       "status": "expired",
-      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
-      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "reason": "CBP CSMS #67844987 (\"Imposing Temporary Section 122 Duties\") states that \"For articles that are the product of any country entered for consumption, or withdrawn from warehouse for consumption, on or after 12:01 a.m. eastern standard time on February 24, 2026, and through 12:01 a.m. eastern daylight time on July 24, 2026, the following HTSUS classification and additional duty rate apply under heading 9903.03.01\" and enumerates the exemption headings 9903.03.02 through 9903.03.11, and the USITC HTS chapter 99 compiler's note corroborates that \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\"",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b3b7b",
       "as_of": "2026-07-24"
     },
     {
       "match": "9903.03.05",
       "status": "expired",
-      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
-      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "reason": "CBP CSMS #67844987 (\"Imposing Temporary Section 122 Duties\") states that \"For articles that are the product of any country entered for consumption, or withdrawn from warehouse for consumption, on or after 12:01 a.m. eastern standard time on February 24, 2026, and through 12:01 a.m. eastern daylight time on July 24, 2026, the following HTSUS classification and additional duty rate apply under heading 9903.03.01\" and enumerates the exemption headings 9903.03.02 through 9903.03.11, and the USITC HTS chapter 99 compiler's note corroborates that \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\"",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b3b7b",
       "as_of": "2026-07-24"
     },
     {
       "match": "9903.03.06",
       "status": "expired",
-      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
-      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "reason": "CBP CSMS #67844987 (\"Imposing Temporary Section 122 Duties\") states that \"For articles that are the product of any country entered for consumption, or withdrawn from warehouse for consumption, on or after 12:01 a.m. eastern standard time on February 24, 2026, and through 12:01 a.m. eastern daylight time on July 24, 2026, the following HTSUS classification and additional duty rate apply under heading 9903.03.01\" and enumerates the exemption headings 9903.03.02 through 9903.03.11, and the USITC HTS chapter 99 compiler's note corroborates that \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\"",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b3b7b",
       "as_of": "2026-07-24"
     },
     {
       "match": "9903.03.07",
       "status": "expired",
-      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
-      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "reason": "CBP CSMS #67844987 (\"Imposing Temporary Section 122 Duties\") states that \"For articles that are the product of any country entered for consumption, or withdrawn from warehouse for consumption, on or after 12:01 a.m. eastern standard time on February 24, 2026, and through 12:01 a.m. eastern daylight time on July 24, 2026, the following HTSUS classification and additional duty rate apply under heading 9903.03.01\" and enumerates the exemption headings 9903.03.02 through 9903.03.11, and the USITC HTS chapter 99 compiler's note corroborates that \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\"",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b3b7b",
       "as_of": "2026-07-24"
     },
     {
       "match": "9903.03.08",
       "status": "expired",
-      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
-      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "reason": "CBP CSMS #67844987 (\"Imposing Temporary Section 122 Duties\") states that \"For articles that are the product of any country entered for consumption, or withdrawn from warehouse for consumption, on or after 12:01 a.m. eastern standard time on February 24, 2026, and through 12:01 a.m. eastern daylight time on July 24, 2026, the following HTSUS classification and additional duty rate apply under heading 9903.03.01\" and enumerates the exemption headings 9903.03.02 through 9903.03.11, and the USITC HTS chapter 99 compiler's note corroborates that \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\"",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b3b7b",
       "as_of": "2026-07-24"
     },
     {
       "match": "9903.03.09",
       "status": "expired",
-      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
-      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "reason": "CBP CSMS #67844987 (\"Imposing Temporary Section 122 Duties\") states that \"For articles that are the product of any country entered for consumption, or withdrawn from warehouse for consumption, on or after 12:01 a.m. eastern standard time on February 24, 2026, and through 12:01 a.m. eastern daylight time on July 24, 2026, the following HTSUS classification and additional duty rate apply under heading 9903.03.01\" and enumerates the exemption headings 9903.03.02 through 9903.03.11, and the USITC HTS chapter 99 compiler's note corroborates that \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\"",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b3b7b",
       "as_of": "2026-07-24"
     },
     {
       "match": "9903.03.10",
       "status": "expired",
-      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
-      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "reason": "CBP CSMS #67844987 (\"Imposing Temporary Section 122 Duties\") states that \"For articles that are the product of any country entered for consumption, or withdrawn from warehouse for consumption, on or after 12:01 a.m. eastern standard time on February 24, 2026, and through 12:01 a.m. eastern daylight time on July 24, 2026, the following HTSUS classification and additional duty rate apply under heading 9903.03.01\" and enumerates the exemption headings 9903.03.02 through 9903.03.11, and the USITC HTS chapter 99 compiler's note corroborates that \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\"",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b3b7b",
       "as_of": "2026-07-24"
     },
     {
       "match": "9903.03.11",
       "status": "expired",
-      "reason": "USITC HTS chapter 99 carries the compiler's note \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\" and CBP CSMS #67844987 set the Section 122 surcharge period as Feb. 24, 2026 through 12:01 a.m. EDT on July 24, 2026.",
-      "source": "https://hts.usitc.gov/reststop/file?release=currentRelease&filename=Chapter%2099",
+      "reason": "CBP CSMS #67844987 (\"Imposing Temporary Section 122 Duties\") states that \"For articles that are the product of any country entered for consumption, or withdrawn from warehouse for consumption, on or after 12:01 a.m. eastern standard time on February 24, 2026, and through 12:01 a.m. eastern daylight time on July 24, 2026, the following HTSUS classification and additional duty rate apply under heading 9903.03.01\" and enumerates the exemption headings 9903.03.02 through 9903.03.11, and the USITC HTS chapter 99 compiler's note corroborates that \"Subdivisions (aa)(i) through (aa)(viii) of U.S. note 2 to this subchapter and headings 9903.03.01-9903.03.11 expired at the close of July 23, 2026. See 91 Fed. Reg. 9339.\"",
+      "source": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b3b7b",
       "as_of": "2026-07-24"
     }
   ]
