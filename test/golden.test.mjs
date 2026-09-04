@@ -48,6 +48,7 @@ test("golden: known values on the current snapshot", () => {
   const tee = core.resolveDuty(dataset, PAIRS[0]);
   assert.equal(tee.base.mfn_pct, 16.5);
   assert.ok(tee.layers.some((l) => l.heading === "9903.88.15"), "Section 301 list 4A heading must be a candidate for cotton tees from China");
+  assert.ok(tee.layers.some((l) => l.heading.startsWith("9903.91.")), "Section 301 four-year-review headings must not be truncated off a China line");
   assert.ok(!tee.layers.some((l) => l.heading.startsWith("9903.40")), "tire headings must be chapter-filtered off a tee line");
   assert.equal(tee.schedule.snapshot_date, dataset.fetched_at);
   assert.ok(tee.possibly_expired.length > 0, "IEEPA/Section 122 overrides must populate possibly_expired on the current snapshot");

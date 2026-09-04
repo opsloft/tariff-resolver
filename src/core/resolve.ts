@@ -49,7 +49,7 @@ export function resolveDuty(ds: Dataset, line: LineInput | null | undefined): Li
   const cands: { e: HtsEntry; match: MatchKind }[] = [];
   const push = (e: HtsEntry, match: MatchKind) => { if (!seen.has(e.htsno)) { seen.add(e.htsno); cands.push({ e, match }); } };
   for (const l of lines) for (const e of ch99FromFootnotes(ds, l)) push(e, "footnote");
-  for (const e of ch99ForNeedles(ds, origin.needles)) push(e, "origin_name");
+  for (const e of ch99ForNeedles(ds, origin.needles, Infinity)) push(e, "origin_name"); // no cap: the chapter filter is the relevance gate
   for (const e of ch99UniversalAll(ds)) push(e, "universal"); // unfiltered so dead headings are counted
 
   const layers: Layer[] = [];
