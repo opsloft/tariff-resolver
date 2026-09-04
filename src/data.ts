@@ -64,9 +64,6 @@ export function diffRates(codes?: string[]): { prev_date: string; changes: RateC
   return { prev_date: prev.fetched_at, changes };
 }
 
-// Kept in the shape the current build ships: no `overrides_version` field yet (the
-// brief's printed version adds one, but overrides are still always EMPTY_OVERRIDES
-// at this point in the refactor — see task-1-report.md for why this was left out).
 export const DATASET_INFO = {
   fetched_at: dataset.fetched_at,
   source: dataset.source,
@@ -74,5 +71,6 @@ export const DATASET_INFO = {
   total_rows: entries.length,
   rate_lines: rateLines.length,
   ch99_rules: ch99.length,
+  overrides_version: dataset.overrides.version,
   data_file: DATA_FILE,
 };
