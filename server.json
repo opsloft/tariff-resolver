@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
   "name": "io.github.opsloft/tariff-resolver",
   "description": "US import duty research: HTS codes, Chapter 99 duties, MPF/HMF fees, landed cost. USITC data.",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "websiteUrl": "https://opsloft.dev",
   "repository": {
     "url": "https://github.com/opsloft/tariff-resolver",
@@ -13,7 +13,7 @@
     {
       "registryType": "npm",
       "identifier": "tariff-resolver",
-      "version": "1.0.3",
+      "version": "1.1.0",
       "transport": {
         "type": "stdio"
       }

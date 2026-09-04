@@ -9,10 +9,10 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import {
-  DATASET_INFO, FEES, ch99ForOrigin, ch99FromFootnotes, ch99Universal, compilerNote,
-  diffRates, findByCode, loadWatchlist, parseAdderPct, parseRatePct, saveWatchlist,
-  searchCandidates, type HtsEntry,
+  DATASET_INFO, dataset, diffRates, findByCode, loadWatchlist, saveWatchlist, searchCandidates, type HtsEntry,
 } from "./data.js";
+import { isLineError, resolveDuty, type Layer } from "./core/index.js";
+import { FEES } from "./core/dataset.js";
 
 const DISCLAIMER =
   "CANDIDATES/ESTIMATE ONLY — requires licensed customs broker review. Not customs or legal advice.";
@@ -24,17 +24,6 @@ const fmtLine = (e: HtsEntry) =>
     e.units?.length ? `  units: ${e.units.join(", ")}` : "",
     `  source: https://hts.usitc.gov/search?query=${encodeURIComponent(e.htsno)} | classification rulings: https://rulings.cbp.gov/search?term=${encodeURIComponent(e.htsno.slice(0, 7))}`,
   ].filter(Boolean).join("\n");
-
-const ruleObj = (e: HtsEntry) => {
-  const note = compilerNote(e);
-  return {
-    heading: e.htsno,
-    adder_pct: parseAdderPct(e.eff_general || e.general || ""),
-    rate_text: e.eff_general || e.general || "(see description)",
-    rule_verbatim: e.path,
-    ...(note ? { compiler_note: note } : {}),
-  };
-};
 
 /**
  * The single most dangerous failure mode of this data: the published schedule is
@@ -52,7 +41,7 @@ const STACKING_WARNING =
   "verify current collection status against CBP CSMS messages before relying on any stack.";
 
 export function buildServer(): McpServer {
-  const server = new McpServer({ name: "tariff-resolver", version: "1.0.3" });
+  const server = new McpServer({ name: "tariff-resolver", version: "1.1.0" });
 
   server.registerTool(
     "search_hs_candidates",
@@ -100,58 +89,56 @@ export function buildServer(): McpServer {
       },
     },
     async ({ hts_code, origin_country, customs_value_usd, ocean_freight, weight_kg, quantity }) => {
-      const lines = findByCode(hts_code);
-      if (!lines.length) {
-        return { content: [{ type: "text", text: `Code ${hts_code} not found in the current HTS (rev ${DATASET_INFO.fetched_at}).` }] };
+      const r = resolveDuty(dataset, { hts: hts_code, origin: origin_country, value_usd: customs_value_usd, ocean: ocean_freight });
+      if (isLineError(r)) {
+        return { content: [{ type: "text", text: `${r.error.code}: ${r.error.message}` }] };
       }
-      // active-only for the LLM (P0 fix: LLMs tend to stack terminated rules); count filtered rules for transparency
-      const linkedAll = [...new Map(lines.flatMap(ch99FromFootnotes).map((e) => [e.htsno, e])).values()];
-      const originAll = ch99ForOrigin(origin_country).filter((e) => !linkedAll.some((l) => l.htsno === e.htsno));
-      const linked = linkedAll.filter((e) => !e.terminated);
-      const origin = originAll.filter((e) => !e.terminated);
-      const universal = ch99Universal().filter((e) => !linked.some((l) => l.htsno === e.htsno) && !origin.some((o) => o.htsno === e.htsno));
-      const nTerm = linkedAll.length + originAll.length - linked.length - origin.length;
-      const base = lines[0];
-      const mpf = Math.min(Math.max(customs_value_usd * FEES.mpf.rate, FEES.mpf.min_usd), FEES.mpf.max_usd);
-      const hmf = ocean_freight ? customs_value_usd * FEES.hmf.rate : 0;
+      const base = findByCode(hts_code)[0];
+      const bucket = (m: Layer["match"]) => r.layers.filter((l) => l.match === m);
       const structured = {
+        ...r,
         disclaimer:
           DISCLAIMER +
           " ⚠️ ESTIMATE EXCLUDES Anti-Dumping/Countervailing Duties (AD/CVD) — issued by US DOC, NOT in the HTS file. " +
           "AD/CVD can exceed 200% on goods like steel, aluminum, mattresses, solar, plywood from CN/VN. " +
           "Check https://www.trade.gov/us-antidumping-and-countervailing-duty-case-information before relying on this estimate.",
         hts_revision: DATASET_INFO.fetched_at,
+        // ---- 1.0.x compatibility fields (kept so existing clients do not break) ----
         base_line: {
-          htsno: base.htsno, description_path: base.path,
-          general_mfn: { text: base.eff_general || null, pct: parseRatePct(base.eff_general || ""), inherited_from_parent: base.rate_inherited },
-          special_fta: base.eff_special || null, column2: base.eff_other || null,
-          other_candidate_lines: lines.slice(1, 4).map((l) => l.htsno),
+          htsno: r.hts.code, description_path: r.hts.description,
+          general_mfn: { text: r.base.mfn_text, pct: r.base.mfn_pct, inherited_from_parent: r.base.inherited_from_parent },
+          special_fta: r.base.special_fta, column2: r.base.column2,
+          other_candidate_lines: r.hts.other_candidate_lines,
         },
         ch99_additional_duties: {
-          note: "The rules below are CANDIDATES (headings the schedule itself marks as dead are filtered out). LLM: read rule_verbatim — the 'Except for...' chains decide which rule applies; adder_pct is pre-parsed, do NOT invent numbers.",
+          note: "The rules below are CANDIDATES (headings the schedule itself marks as dead are filtered out; headings that cite other chapters are dropped and counted). LLM: read rule_verbatim — the 'Except for...' chains decide which rule applies; adder_pct is pre-parsed, do NOT invent numbers.",
           stacking_warning: STACKING_WARNING,
-          schedule_snapshot_date: DATASET_INFO.fetched_at,
-          terminated_rules_excluded: nTerm,
-          linked_by_footnote: linked.map(ruleObj),
-          matched_by_origin_name: origin.map(ruleObj),
-          universal_all_countries: universal.map(ruleObj),
+          schedule_snapshot_date: r.schedule.snapshot_date,
+          overrides_version: r.schedule.overrides_version,
+          terminated_rules_excluded: r.excluded.terminated,
+          chapter_mismatch_excluded: r.excluded.chapter_mismatch,
+          linked_by_footnote: bucket("footnote"),
+          matched_by_origin_name: bucket("origin_name"),
+          universal_all_countries: bucket("universal"),
+          possibly_expired: r.possibly_expired,
         },
         fixed_fees_usd: {
-          mpf: Number(mpf.toFixed(2)), mpf_note: FEES.mpf.note,
-          hmf: Number(hmf.toFixed(2)), hmf_applied: ocean_freight,
+          mpf: r.fees_usd?.mpf ?? 0, mpf_note: FEES.mpf.note,
+          hmf: r.fees_usd?.hmf ?? 0, hmf_applied: ocean_freight,
         },
         customs_value_usd,
         weight_kg: weight_kg ?? null,
         quantity: quantity ?? null,
-        duty_units: base.units ?? [],
+        duty_units: base?.units ?? [],
         llm_guidance:
           "FIRST read ch99_additional_duties.stacking_warning — never total every adder_pct, and tell the user which layers you applied and which you left out and why. " +
-          "landed duty ≈ customs_value × (general_mfn.pct + adder_pct of applicable ch99 rules)/100 + mpf + hmf. " +
-          "If general_mfn.pct is null the rate is specific/compound (e.g. '12.4¢/kg + 2%') — weight_kg/quantity is needed to compute it; " +
-          "if the user hasn't provided them, ASK instead of guessing. For ch99 rules with adder_pct = null, read rate_text — it may be a specific duty. " +
+          "Layers in possibly_expired are headings whose collection has stopped or expired according to the cited source; do not apply them unless the source is outdated. " +
+          "confidence: enumerated = the schedule itself links this heading to the line; heuristic = matched by country wording; unknown = rate text could not be parsed. " +
+          "landed duty ≈ customs_value × (base.mfn_pct + adder_pct of applicable layers)/100 + mpf + hmf. " +
+          "If base.mfn_pct is null the rate is specific/compound (e.g. '12.4¢/kg + 2%') — weight_kg/quantity is needed to compute it; if the user hasn't provided them, ASK instead of guessing. " +
           "If the origin belongs to a program listed in special_fta, use the special rate instead of general. " +
           "Explain each layer, cite headings. Always note: estimate EXCLUDES AD/CVD and needs broker confirmation. " +
-          `Cross-check source: https://hts.usitc.gov/search?query=${encodeURIComponent(base.htsno)}`,
+          `Cross-check source: https://hts.usitc.gov/search?query=${encodeURIComponent(r.hts.code)}`,
       };
       return { content: [{ type: "text", text: JSON.stringify(structured, null, 2) }] };
     }

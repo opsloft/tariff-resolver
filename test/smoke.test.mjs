@@ -68,8 +68,14 @@ test("MCP server over stdio: tools/list + one real call per tool", async () => {
       hts_code: "9617.00.10", origin_country: "China", customs_value_usd: 10000, ocean_freight: true,
     });
     const parsed = JSON.parse(scenario);
-    assert.equal(parsed.base_line.general_mfn.pct, 7.2);
+    assert.equal(parsed.base_line.general_mfn.pct, 7.2);            // 1.0.x compat field
+    assert.equal(parsed.base.mfn_pct, 7.2);                          // 1.1.0 core field
     assert.ok(parsed.fixed_fees_usd.mpf > 0 && parsed.fixed_fees_usd.hmf > 0);
+    assert.ok(Array.isArray(parsed.layers) && parsed.layers.length > 0);
+    assert.ok(Array.isArray(parsed.possibly_expired));
+    assert.ok(parsed.layers.every((l) => ["enumerated", "heuristic", "unknown"].includes(l.confidence)));
+    assert.equal(typeof parsed.excluded.chapter_mismatch, "number");
+    assert.equal(parsed.schedule.snapshot_date, parsed.hts_revision);
     assert.ok(
       parsed.ch99_additional_duties.linked_by_footnote.length +
         parsed.ch99_additional_duties.matched_by_origin_name.length +
