@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 /**
- * Entry streamable-http (tuần 2) — chuẩn của 11.102/11.860 server remote trên registry.
- * Stateless (server chỉ tra dữ liệu, không giữ phiên) — mỗi request dựng transport mới.
+ * Streamable-HTTP entry point — the transport remote servers use on the MCP registry.
+ * Stateless (the server only looks data up, it keeps no session) — every request builds a
+ * fresh transport.
  *
- * API key (BYOK):
- * - RADAR_KEYS="key1,key2"  hoặc file JSON RADAR_KEYS_FILE={"<key>":{"plan":"pro","limit":1000}}
- * - Không cấu hình gì -> chế độ MỞ (dev local), in cảnh báo.
- * - Mỗi lượt gọi ghi 1 dòng JSONL vào usage.log (nền tảng metering; thay bằng Unkey ở bước deploy).
+ * API keys (BYOK):
+ * - RADAR_KEYS="key1,key2", or a JSON file at RADAR_KEYS_FILE={"<key>":{"plan":"pro","limit":1000}}
+ * - With neither configured the server runs OPEN (local dev only) and prints a warning.
+ * - Every call appends one JSONL line to usage.log (the metering substrate; swap for a hosted
+ *   key service at deploy time).
  */
 import { createServer } from "node:http";
 import { readFileSync, existsSync } from "node:fs";
@@ -28,7 +30,7 @@ function loadKeys(): Map<string, KeyInfo> | null {
   return list.length ? new Map(list.map((k) => [k, {}])) : null;
 }
 const keys = loadKeys();
-if (!keys) console.error("⚠️  Không có RADAR_KEYS/RADAR_KEYS_FILE — chạy chế độ MỞ (chỉ dùng cho dev local).");
+if (!keys) console.error("⚠️  No RADAR_KEYS/RADAR_KEYS_FILE — running in OPEN mode (local dev only).");
 
 const usedThisMonth = new Map<string, number>();
 
@@ -53,24 +55,25 @@ const httpServer = createServer(async (req, res) => {
     key = apiKeyOf(req);
     if (!key || !keys.has(key)) {
       res.writeHead(401, { "content-type": "application/json" })
-        .end(JSON.stringify({ error: "API key không hợp lệ. Header: Authorization: Bearer <key>" }));
+        .end(JSON.stringify({ error: "Invalid API key. Header: Authorization: Bearer <key>" }));
       return;
     }
     const info = keys.get(key)!;
     const used = usedThisMonth.get(key) ?? 0;
     if (info.limit && used >= info.limit) {
       res.writeHead(429, { "content-type": "application/json" })
-        .end(JSON.stringify({ error: `Hết hạn mức ${info.limit} lượt/tháng của gói ${info.plan ?? "free"}.` }));
+        .end(JSON.stringify({ error: `Monthly quota of ${info.limit} requests for plan ${info.plan ?? "free"} exhausted.` }));
       return;
     }
     usedThisMonth.set(key, used + 1);
   }
-  // async, fire-and-forget: log đồng bộ chặn event loop (review agy); chỉ log 4 ký tự CUỐI + độ dài
+  // async, fire-and-forget: a synchronous log write would block the event loop.
+  // Only the LAST 4 characters of the key plus its length are recorded, never the key itself.
   const keyTag = key ? `…${key.slice(-4)}(${key.length})` : "open";
   void appendFile(USAGE_LOG, JSON.stringify({ t: new Date().toISOString(), key: keyTag, m: req.method }) + "\n")
-    .catch(() => { /* metering không được phép làm chết request */ });
+    .catch(() => { /* metering must never kill the request */ });
 
-  // Stateless: transport + server mới cho mỗi request, đóng khi res kết thúc.
+  // Stateless: a new transport + server per request, closed when the response ends.
   const server = buildServer();
   const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
   res.on("close", () => { void transport.close(); void server.close(); });
@@ -79,5 +82,5 @@ const httpServer = createServer(async (req, res) => {
 });
 
 httpServer.listen(PORT, () => {
-  console.error(`tariff-resolver streamable-http: http://localhost:${PORT}/mcp ${keys ? `(${keys.size} API key)` : "(chế độ MỞ)"}`);
+  console.error(`tariff-resolver streamable-http: http://localhost:${PORT}/mcp ${keys ? `(${keys.size} API key(s))` : "(OPEN mode)"}`);
 });

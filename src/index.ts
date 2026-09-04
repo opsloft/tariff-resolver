@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Entry stdio — Claude Code / agy-ide / Claude Desktop chạy local. */
+/** stdio entry point — for MCP clients that run the server locally as a child process. */
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { buildServer } from "./server.js";
 
