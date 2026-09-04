@@ -15,6 +15,8 @@ test("normalizeOrigin: ISO-2, names, aliases, unknown", () => {
   assert.deepEqual(core.normalizeOrigin("vn"), { name: "Vietnam", needles: ["vietnam", "viet nam"] });
   assert.deepEqual(core.normalizeOrigin("Mexico"), { name: "Mexico", needles: ["mexico"] });
   assert.deepEqual(core.normalizeOrigin("  South Korea "), { name: "South Korea", needles: ["korea"] });
+  assert.deepEqual(core.normalizeOrigin("mexico"), { name: "Mexico", needles: ["mexico"] });
+  assert.deepEqual(core.normalizeOrigin("SOUTH KOREA"), { name: "South Korea", needles: ["korea"] });
   assert.equal(core.normalizeOrigin("ZZ"), null);
   assert.equal(core.normalizeOrigin(""), null);
 });
