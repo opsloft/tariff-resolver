@@ -2,7 +2,7 @@
  * Pure dataset core: builds the HTS hierarchy from a USITC dump and answers lookups.
  * No Node APIs — this file also runs inside a Cloudflare Worker bundle.
  */
-import type { Dataset, Dump, HtsEntry, Overrides } from "./types.js";
+import type { Dataset, Dump, HtsEntry, Overrides, OverrideEntry } from "./types.js";
 import { normalizeOrigin } from "./origin.js";
 
 // Matches the schedule's own "this heading is dead" markers (broadened in 1.0.3).
@@ -115,3 +115,12 @@ export const FEES = {
   mpf: { rate: 0.003464, min_usd: 33.58, max_usd: 651.5, note: "Merchandise Processing Fee FY2026 — verify current min/max at cbp.gov before final decisions" },
   hmf: { rate: 0.00125, note: "Harbor Maintenance Fee — ocean shipments only, no min/max" },
 };
+
+/** Curated status override for a heading: the most specific (longest) matching prefix wins. */
+export function findOverride(overrides: Overrides, heading: string): OverrideEntry | null {
+  let best: OverrideEntry | null = null;
+  for (const o of overrides.entries) {
+    if (heading.startsWith(o.match) && (!best || o.match.length > best.match.length)) best = o;
+  }
+  return best;
+}

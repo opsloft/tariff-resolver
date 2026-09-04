@@ -1,0 +1,19 @@
+{
+  "version": "fixture-2026-09-04",
+  "entries": [
+    {
+      "match": "9903.01.2",
+      "status": "collection_stopped",
+      "reason": "Fixture: IEEPA-based headings kept printing after collection stopped",
+      "source": "https://example.invalid/csms",
+      "as_of": "2026-02-24"
+    },
+    {
+      "match": "9903.01.25",
+      "status": "expired",
+      "reason": "Fixture: more specific entry must win over the 9903.01.2 prefix",
+      "source": "https://example.invalid/fr",
+      "as_of": "2026-03-01"
+    }
+  ]
+}

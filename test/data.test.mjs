@@ -160,4 +160,5 @@ test("DATASET_INFO reflects the loaded fixture", () => {
   assert.equal(data.DATASET_INFO.fetched_at, "2026-08-18");
   assert.ok(data.DATASET_INFO.ch99_rules >= 5);
   assert.equal(data.DATASET_INFO.data_file, FIXTURE);
+  assert.match(data.DATASET_INFO.overrides_version, /^\d{4}-\d{2}-\d{2}$/);
 });

@@ -41,3 +41,12 @@ test("chapterMismatch: cited-but-different drops, cited-and-matching keeps, unci
   assert.equal(core.chapterMismatch("articles of chapter 61", "61091000"), false);
   assert.equal(core.chapterMismatch(data.entries.find((e) => e.htsno === "9903.01.25").path, "61091000"), false);
 });
+
+test("findOverride: longest matching prefix wins; null when nothing matches", () => {
+  const ov = data.dataset.overrides;
+  assert.equal(ov.version, "fixture-2026-09-04");
+  assert.equal(core.findOverride(ov, "9903.01.25").status, "expired");
+  assert.equal(core.findOverride(ov, "9903.01.20").status, "collection_stopped");
+  assert.equal(core.findOverride(ov, "9903.88.15"), null);
+  assert.equal(core.findOverride({ version: "x", entries: [] }, "9903.01.25"), null);
+});
