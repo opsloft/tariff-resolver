@@ -16,7 +16,7 @@ const shapeOf = (v) =>
   typeof v === "object" ? Object.fromEntries(Object.keys(v).sort().map((k) => [k, shapeOf(v[k])])) :
   typeof v;
 
-// The contract Stockyard reads: keys and types are frozen; values move with the schedule.
+// The contract a downstream consumer reads: keys and types are frozen; values move with the schedule.
 const EXPECTED_SHAPE = {
   base: { column2: "string", inherited_from_parent: "boolean", mfn_pct: "number", mfn_text: "string", special_fta: "string" },
   disclaimer: "string",
@@ -30,7 +30,7 @@ const EXPECTED_SHAPE = {
   warnings: ["string"],
 };
 
-test("golden: the three Stockyard pairs resolve with the frozen shape", () => {
+test("golden: the three reference pairs resolve with the frozen shape", () => {
   for (const p of PAIRS) {
     const r = core.resolveDuty(dataset, p);
     assert.ok(!core.isLineError(r), `${p.id}: ${JSON.stringify(r)}`);
