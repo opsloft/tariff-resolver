@@ -61,6 +61,17 @@ test("citedPrefixes: subheadings, ranges, chapters; ignores 99xx and note refere
   assert.ok(wide.length <= 3, `wide range should not enumerate: ${JSON.stringify(wide)}`);
 });
 
+test("citedPrefixes: a range whose endpoints share no digit covers everything between them", () => {
+  const text = "headings 0101.00.00 through 9503.00.00";
+  const cited = core.citedPrefixes(text);
+  assert.ok(!cited.includes(""), "the everything-sentinel must never leak to callers");
+  assert.ok(cited.includes("01010000") && cited.includes("95030000"), JSON.stringify(cited));
+  // the heading cites the whole schedule, so nothing inside the range may be excluded
+  assert.equal(core.chapterMismatch(text, "61091000"), false);
+  assert.equal(core.chapterMismatch(text, "01010000"), false);
+  assert.equal(core.chapterMismatch("chapters 1 through 97", "61091000"), false);
+});
+
 test("chapterMismatch: cited-but-different drops, cited-and-matching keeps, uncited keeps", () => {
   const tires = data.entries.find((e) => e.htsno === "9903.40.05").path;
   assert.equal(core.chapterMismatch(tires, "61091000"), true);

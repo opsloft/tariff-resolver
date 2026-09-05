@@ -24,7 +24,9 @@ const RANGE_CAP = 1000;
  * zero-padded to the endpoint length. A range with more than RANGE_CAP intermediates is
  * not enumerated: the endpoints' longest common leading prefix is added instead, so the
  * range still covers every member rather than truncating to the first RANGE_CAP and
- * silently under-covering the tail.
+ * silently under-covering the tail. When the endpoints share no leading digit at all
+ * ("headings 0101.00.00 through 9503.00.00") that prefix is the ALL sentinel, which
+ * covers every code — the heading really does cite the whole span.
  */
 function walkRange(tokens: string[], out: Set<string>): void {
   let prev: string | null = null;
@@ -38,8 +40,7 @@ function walkRange(tokens: string[], out: Set<string>): void {
       const end = Number(t);
       if (end > start) {
         if (end - start - 1 > RANGE_CAP) {
-          const shared = commonPrefix(prev, t);
-          if (shared) out.add(shared); // endpoints share nothing -> cite the endpoints only
+          out.add(commonPrefix(prev, t)); // "" (the ALL sentinel) when the endpoints share no digit
         } else {
           for (let n = start + 1; n < end; n++) out.add(String(n).padStart(t.length, "0"));
         }
@@ -51,8 +52,16 @@ function walkRange(tokens: string[], out: Set<string>): void {
   }
 }
 
-/** Digits-only HTS prefixes cited by the heading text. Never returns 99xx (self-references). */
-export function citedPrefixes(text: string): string[] {
+/**
+ * The empty prefix, which every code starts with: "this heading cites everything". Only a
+ * range too wide to enumerate whose endpoints share no leading digit produces it. It stays
+ * inside this module — citedPrefixes filters it out so callers only ever see real prefixes,
+ * while chapterMismatch reads the raw set and therefore excludes nothing.
+ */
+const ALL = "";
+
+/** Digits-only HTS prefixes cited by the heading text, ALL sentinel included. */
+function citedPrefixSet(text: string): Set<string> {
   const out = new Set<string>();
   for (const m of text.matchAll(SEG_RX)) {
     const toks = (m[1].match(/\d{4}(?:\.\d{2}){0,3}|through|to|–|-/g) ?? []).map((t) => /^\d/.test(t) ? t.replace(/\D/g, "") : t);
@@ -62,12 +71,17 @@ export function citedPrefixes(text: string): string[] {
     const toks = (m[1].match(/\d{1,2}|through|to|–|-/g) ?? []).map((t) => /^\d/.test(t) ? t.padStart(2, "0") : t);
     walkRange(toks, out);
   }
-  return [...out];
+  return out;
+}
+
+/** Digits-only HTS prefixes cited by the heading text. Never returns 99xx (self-references). */
+export function citedPrefixes(text: string): string[] {
+  return [...citedPrefixSet(text)].filter((p) => p !== ALL);
 }
 
 /** True when the heading cites prefixes and none of them covers the line's code. */
 export function chapterMismatch(text: string, codeDigits: string): boolean {
-  const cited = citedPrefixes(text);
-  if (!cited.length) return false;
-  return !cited.some((p) => codeDigits.startsWith(p));
+  const cited = citedPrefixSet(text);
+  if (!cited.size) return false;
+  return ![...cited].some((p) => codeDigits.startsWith(p));
 }
