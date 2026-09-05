@@ -70,6 +70,15 @@ test("ch99ForOrigin matches aliases (China includes Hong Kong; Vietnam spelled e
   assert.ok(vn.includes("9903.02.69"));
 });
 
+test("ch99ForOrigin matches whole words only, not substrings of another country", () => {
+  // "oman" is a substring of "Romania"/"Romano"; "Guinea" is a whole word inside two other countries
+  assert.deepEqual(data.ch99ForOrigin("OM").map((e) => e.htsno), []);
+  assert.deepEqual(data.ch99ForOrigin("RO").map((e) => e.htsno), ["9903.89.10"]);
+  assert.deepEqual(data.ch99ForOrigin("GN").map((e) => e.htsno), ["9903.02.72"]);
+  assert.deepEqual(data.ch99ForOrigin("PG").map((e) => e.htsno), ["9903.02.71"]);
+  assert.deepEqual(data.ch99ForOrigin("Chnia"), []);
+});
+
 test("ch99Universal returns any-country rules and filters terminated provisions", () => {
   const uni = data.ch99Universal().map((e) => e.htsno);
   assert.ok(uni.includes("9903.01.25"));
@@ -156,7 +165,7 @@ test("diffRates reports changed, added, and deleted lines, with code scoping", (
 });
 
 test("DATASET_INFO reflects the loaded fixture", () => {
-  assert.equal(data.DATASET_INFO.total_rows, 16);
+  assert.equal(data.DATASET_INFO.total_rows, 19);
   assert.equal(data.DATASET_INFO.fetched_at, "2026-08-18");
   assert.ok(data.DATASET_INFO.ch99_rules >= 5);
   assert.equal(data.DATASET_INFO.data_file, FIXTURE);

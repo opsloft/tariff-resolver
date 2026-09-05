@@ -203,6 +203,9 @@
    "additionalDuties": null
   },
   { "htsno": "9903.40.05", "indent": "0", "description": "New pneumatic tires, of rubber, the foregoing the product China, under the terms of U.S. note 14 to this subchapter (provided for in subheading 4011.10.10 or 4011.20.10)", "superior": null, "units": [], "general": "25%", "special": "", "other": "", "footnotes": null, "quotaQuantity": null, "additionalDuties": null },
+  { "htsno": "9903.89.10", "indent": "0", "description": "Articles the product of Romania, as provided for in U.S. note 30 to this subchapter", "superior": null, "units": [], "general": "The duty provided in the applicable subheading + 10%", "special": "", "other": "", "footnotes": null, "quotaQuantity": null, "additionalDuties": null },
+  { "htsno": "9903.02.71", "indent": "0", "description": "Articles the product of Papua New Guinea, as provided for in U.S. note 2 to this subchapter", "superior": null, "units": [], "general": "The duty provided in the applicable subheading + 15%", "special": "", "other": "", "footnotes": null, "quotaQuantity": null, "additionalDuties": null },
+  { "htsno": "9903.02.72", "indent": "0", "description": "Articles the product of Guinea, as provided for in U.S. note 2 to this subchapter", "superior": null, "units": [], "general": "The duty provided in the applicable subheading + 10%", "special": "", "other": "", "footnotes": null, "quotaQuantity": null, "additionalDuties": null },
   { "htsno": "9903.05.31", "indent": "0", "description": "Except for products described in headings 9903.05.85–9903.05.92, articles the product of China, as provided for in U.S. note 52 to this subchapter", "superior": null, "units": [], "general": "The duty provided in the applicable subheading plus a specific duty", "special": "", "other": "", "footnotes": null, "quotaQuantity": null, "additionalDuties": null }
  ]
 }

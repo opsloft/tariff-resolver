@@ -3,7 +3,7 @@
  * No Node APIs — this file also runs inside a Cloudflare Worker bundle.
  */
 import type { Dataset, Dump, HtsEntry, Overrides, OverrideEntry } from "./types.js";
-import { normalizeOrigin } from "./origin.js";
+import { needleMatcher, normalizeOrigin } from "./origin.js";
 
 // Matches the schedule's own "this heading is dead" markers (broadened in 1.0.3).
 const TERMINATED_RX =
@@ -80,13 +80,15 @@ export function ch99ForOrigin(ds: Dataset, origin: string, limit = 25): HtsEntry
 }
 
 /**
- * Chapter 99 headings whose text contains any of the needles. `limit` stays available for
- * callers that want a short preview list; resolveDuty passes no cap (Infinity) because the
+ * Chapter 99 headings whose text names any of the needles as a whole word or phrase (see
+ * needleMatcher — a bare substring test made Oman match "Romania"). `limit` stays available
+ * for callers that want a short preview list; resolveDuty passes no cap (Infinity) because the
  * chapter filter, not a positional slice, is the relevance gate — a positional cut here
  * silently drops live headings that sort late (Section 301 exclusions, four-year review).
  */
 export function ch99ForNeedles(ds: Dataset, needles: string[], limit = 25): HtsEntry[] {
-  return ds.ch99.filter((e) => { const hay = e.path.toLowerCase(); return needles.some((n) => hay.includes(n)); }).slice(0, limit);
+  const matchers = needles.map(needleMatcher);
+  return ds.ch99.filter((e) => { const hay = e.path.toLowerCase(); return matchers.some((m) => m(hay)); }).slice(0, limit);
 }
 
 /** Headings that apply to every origin ("any country" wording), live only. */

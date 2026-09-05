@@ -113,6 +113,36 @@ const NEEDLES: Record<string, string[]> = {
   turkey: ["turkey", "t\u00fcrkiye"],
 };
 
+/**
+ * Needles that are themselves a whole word inside a *different* country's name, mapped to the
+ * longer names they must not be read as. Word boundaries alone cannot separate these: "Guinea"
+ * is a whole word inside "Papua New Guinea", and "Republic of the Congo" inside "Democratic
+ * Republic of the Congo". Keyed by needle, values lower-case.
+ */
+const NEEDLE_EXCLUSIONS: Record<string, string[]> = {
+  guinea: ["papua new guinea", "equatorial guinea", "guinea-bissau"],
+  "republic of the congo": ["democratic republic of the congo"],
+};
+
+const escapeRx = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/**
+ * One matcher per needle: true when the lower-case heading text names that country as a whole
+ * word or phrase. A needle is matched with word boundaries on both sides, so "Oman" no longer
+ * matches "Romania", "Niger" no longer matches "Nigeria", and "Dominica" no longer matches
+ * "Dominican Republic". Any longer name from NEEDLE_EXCLUSIONS is listed as an earlier
+ * alternative so the scan consumes it first and discards it; only a standalone mention of the
+ * needle itself counts as a hit.
+ */
+export function needleMatcher(needle: string): (hay: string) => boolean {
+  const longer = [...(NEEDLE_EXCLUSIONS[needle] ?? [])].sort((a, b) => b.length - a.length);
+  const rx = new RegExp(`\\b(?:${[...longer, needle].map(escapeRx).join("|")})\\b`, "g");
+  return (hay: string): boolean => {
+    for (const m of hay.matchAll(rx)) if (m[0] === needle) return true;
+    return false;
+  };
+}
+
 export function normalizeOrigin(input: string): { name: string; needles: string[] } | null {
   const t = (input ?? "").trim();
   if (!t) return null;
