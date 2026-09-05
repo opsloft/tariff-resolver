@@ -37,7 +37,10 @@ export function resolveDuty(ds: Dataset, line: LineInput | null | undefined): Li
     return err(id, "INVALID_LINE", "Each line needs string fields hts and origin");
   }
   const origin = normalizeOrigin(line.origin);
-  if (!origin) return err(id, "ORIGIN_UNKNOWN", `Unrecognized origin "${line.origin}" — use ISO-3166 alpha-2 or an English country name`);
+  if (!origin) {
+    return err(id, "ORIGIN_UNKNOWN",
+      `Unrecognized origin "${line.origin}" — use an ISO-3166 alpha-2 code (e.g. "CN") or an English country name`);
+  }
   const lines = findByCode(ds, line.hts);
   if (!lines.length) return err(id, "HTS_NOT_FOUND", `HTS ${line.hts} is not in the schedule snapshot ${ds.fetched_at}`);
 

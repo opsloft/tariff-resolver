@@ -59,3 +59,9 @@ test("golden: known values on the current snapshot", () => {
   const toy = core.resolveDuty(dataset, PAIRS[2]);
   assert.equal(toy.base.mfn_pct, 0);
 });
+
+test("golden: a misspelled origin is an error, never a thinner stack", () => {
+  const bad = core.resolveDuty(dataset, { hts: "6109.10.00", origin: "Chnia" });
+  assert.ok(core.isLineError(bad), `expected a LineError, got ${JSON.stringify(bad).slice(0, 200)}`);
+  assert.equal(bad.error.code, "ORIGIN_UNKNOWN");
+});

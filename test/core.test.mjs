@@ -25,6 +25,25 @@ test("normalizeOrigin: ISO-2, names, aliases, unknown", () => {
   assert.equal(core.normalizeOrigin(""), null);
 });
 
+test("normalizeOrigin: alternative spellings resolve, misspellings are rejected", () => {
+  assert.equal(core.normalizeOrigin("Chnia"), null, "a misspelling must not pass through as its own origin");
+  assert.equal(core.normalizeOrigin("Freedonia"), null);
+  assert.equal(core.normalizeOrigin("x"), null);
+  assert.deepEqual(core.normalizeOrigin("PRC"), { name: "China", needles: ["china", "hong kong", "macau"] });
+  assert.deepEqual(core.normalizeOrigin("Viet Nam"), { name: "Vietnam", needles: ["vietnam", "viet nam"] });
+  assert.equal(core.normalizeOrigin("USA").name, "United States");
+  assert.equal(core.normalizeOrigin("England").name, "United Kingdom");
+  assert.equal(core.normalizeOrigin("Great Britain").name, "United Kingdom");
+  assert.equal(core.normalizeOrigin("Myanmar").name, "Burma");
+  assert.equal(core.normalizeOrigin("Czechia").name, "Czech Republic");
+  assert.equal(core.normalizeOrigin("Holland").name, "Netherlands");
+  assert.equal(core.normalizeOrigin("UAE").name, "United Arab Emirates");
+  assert.equal(core.normalizeOrigin("Russian Federation").name, "Russia");
+  assert.equal(core.normalizeOrigin("Korea").name, "South Korea");
+  assert.equal(core.normalizeOrigin("C\u00f4te d'Ivoire").name, "Ivory Coast");
+  assert.equal(core.normalizeOrigin("Taiwan").name, "Taiwan");
+});
+
 test("citedPrefixes: subheadings, ranges, chapters; ignores 99xx and note references", () => {
   const tires = data.entries.find((e) => e.htsno === "9903.40.05").path;
   assert.deepEqual(core.citedPrefixes(tires).sort(), ["40111010", "40112010"]);
@@ -109,6 +128,10 @@ test("resolveDuty: error lines carry the id and never throw", () => {
   assert.deepEqual(core.resolveDuty(ds, { id: "x", hts: "0000.00.00", origin: "CN" }),
     { id: "x", error: { code: "HTS_NOT_FOUND", message: "HTS 0000.00.00 is not in the schedule snapshot 2026-08-18" } });
   assert.equal(core.resolveDuty(ds, { hts: "6109.10.00", origin: "ZZ" }).error.code, "ORIGIN_UNKNOWN");
+  const misspelled = core.resolveDuty(ds, { hts: "6109.10.00", origin: "Chnia" });
+  assert.equal(misspelled.error.code, "ORIGIN_UNKNOWN");
+  assert.equal(misspelled.error.message,
+    'Unrecognized origin "Chnia" \u2014 use an ISO-3166 alpha-2 code (e.g. "CN") or an English country name');
   assert.equal(core.resolveDuty(ds, { hts: 42, origin: "CN" }).error.code, "INVALID_LINE");
   assert.equal(core.resolveDuty(ds, null).error.code, "INVALID_LINE");
   assert.ok(core.isLineError(core.resolveDuty(ds, null)));

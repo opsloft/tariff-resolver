@@ -57,22 +57,69 @@ const CANONICAL_NAMES: Record<string, string> = Object.values(ISO2).reduce((acc,
   return acc;
 }, {} as Record<string, string>);
 
-const ALIASES: Record<string, string[]> = {
+/**
+ * Alternative spellings accepted as input: lowercase spelling -> the canonical name above.
+ * Only spellings listed here (or a canonical name, or an ISO-2 code) are accepted; anything
+ * else is rejected rather than passed through, because a pass-through silently resolves a
+ * misspelled country against zero origin headings and understates the duty stack.
+ */
+const ALIASES: Record<string, string> = {
+  "viet nam": "Vietnam",
+  "usa": "United States",
+  "u.s.a.": "United States",
+  "united states of america": "United States",
+  "great britain": "United Kingdom",
+  "england": "United Kingdom",
+  "scotland": "United Kingdom",
+  "wales": "United Kingdom",
+  "prc": "China",
+  "people's republic of china": "China",
+  "p.r. china": "China",
+  "mainland china": "China",
+  "korea": "South Korea",
+  "republic of korea": "South Korea",
+  "korea, republic of": "South Korea",
+  "democratic people's republic of korea": "North Korea",
+  "myanmar": "Burma",
+  "czechia": "Czech Republic",
+  "cote d'ivoire": "Ivory Coast",
+  "c\u00f4te d'ivoire": "Ivory Coast",
+  "russian federation": "Russia",
+  "the netherlands": "Netherlands",
+  "holland": "Netherlands",
+  "uae": "United Arab Emirates",
+  "u.a.e.": "United Arab Emirates",
+  "t\u00fcrkiye": "Turkey",
+  "turkiye": "Turkey",
+  "hong kong sar": "Hong Kong",
+  "macao": "Macau",
+  "cape verde islands": "Cape Verde",
+  "swaziland": "Eswatini",
+  "timor-leste": "East Timor",
+  "laos pdr": "Laos",
+  "vatican": "Vatican City",
+  "holy see": "Vatican City",
+};
+
+/**
+ * Heading-text needles per canonical name, where the schedule's wording is broader or
+ * different from the canonical name itself. Everything else searches for its own name.
+ */
+const NEEDLES: Record<string, string[]> = {
   china: ["china", "hong kong", "macau"],
   "united kingdom": ["united kingdom", "uk"],
   "south korea": ["korea"],
   vietnam: ["vietnam", "viet nam"],
-  turkey: ["turkey", "türkiye"],
-  "türkiye": ["turkey", "türkiye"],
+  turkey: ["turkey", "t\u00fcrkiye"],
 };
 
 export function normalizeOrigin(input: string): { name: string; needles: string[] } | null {
   const t = (input ?? "").trim();
   if (!t) return null;
-  let name: string | null = t;
-  if (t.length === 2) name = ISO2[t.toUpperCase()] ?? null;
-  else name = CANONICAL_NAMES[t.toLowerCase()] ?? t;
+  const name = t.length === 2
+    ? ISO2[t.toUpperCase()] ?? null
+    : CANONICAL_NAMES[t.toLowerCase()] ?? ALIASES[t.toLowerCase()] ?? null;
   if (!name) return null;
   const key = name.toLowerCase();
-  return { name, needles: ALIASES[key] ?? [key] };
+  return { name, needles: NEEDLES[key] ?? [key] };
 }
