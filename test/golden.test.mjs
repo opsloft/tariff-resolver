@@ -60,6 +60,31 @@ test("golden: known values on the current snapshot", () => {
   assert.equal(toy.base.mfn_pct, 0);
 });
 
+test("golden: Russia matches the schedule's \"Russian Federation\" wording", () => {
+  const r = core.resolveDuty(dataset, { hts: "7326.90.86", origin: "RU" });
+  assert.ok(!core.isLineError(r), JSON.stringify(r));
+  const headings = [...r.layers, ...r.possibly_expired].map((l) => l.heading);
+  assert.ok(headings.includes("9903.82.14"), `Section 232 steel heading missing: ${JSON.stringify(headings)}`);
+});
+
+test("golden: C\u00f4te d'Ivoire is found whichever apostrophe the schedule prints", () => {
+  assert.ok(core.ch99ForOrigin(dataset, "CI", Infinity).length >= 2);
+});
+
+// A floor against silent needle-table regressions: these are the Chapter 99 headings each origin
+// name matches on the bundled snapshot, before the chapter filter. Update deliberately when the
+// schedule or the needle tables change.
+const ORIGIN_CANDIDATES = {
+  CN: 94, VN: 3, RU: 9, GB: 50, KR: 42, JP: 26, MX: 32, CA: 40, IN: 9, TR: 2, BR: 19, US: 118,
+};
+
+test("golden: origin-name candidate counts on the current snapshot", () => {
+  const got = Object.fromEntries(
+    Object.keys(ORIGIN_CANDIDATES).map((c) => [c, core.ch99ForOrigin(dataset, c, Infinity).length])
+  );
+  assert.deepEqual(got, ORIGIN_CANDIDATES);
+});
+
 test("golden: a misspelled origin is an error, never a thinner stack", () => {
   const bad = core.resolveDuty(dataset, { hts: "6109.10.00", origin: "Chnia" });
   assert.ok(core.isLineError(bad), `expected a LineError, got ${JSON.stringify(bad).slice(0, 200)}`);

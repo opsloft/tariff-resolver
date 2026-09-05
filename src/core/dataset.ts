@@ -3,7 +3,7 @@
  * No Node APIs — this file also runs inside a Cloudflare Worker bundle.
  */
 import type { Dataset, Dump, HtsEntry, Overrides, OverrideEntry } from "./types.js";
-import { needleMatcher, normalizeOrigin } from "./origin.js";
+import { foldText, needleMatcher, normalizeOrigin } from "./origin.js";
 
 // Matches the schedule's own "this heading is dead" markers (broadened in 1.0.3).
 const TERMINATED_RX =
@@ -88,7 +88,7 @@ export function ch99ForOrigin(ds: Dataset, origin: string, limit = 25): HtsEntry
  */
 export function ch99ForNeedles(ds: Dataset, needles: string[], limit = 25): HtsEntry[] {
   const matchers = needles.map(needleMatcher);
-  return ds.ch99.filter((e) => { const hay = e.path.toLowerCase(); return matchers.some((m) => m(hay)); }).slice(0, limit);
+  return ds.ch99.filter((e) => { const hay = foldText(e.path); return matchers.some((m) => m(hay)); }).slice(0, limit);
 }
 
 /** Headings that apply to every origin ("any country" wording), live only. */

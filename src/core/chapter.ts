@@ -1,5 +1,5 @@
 /**
- * The chapter filter — the origin-name false-match filter (design-partner request #1).
+ * The chapter filter — the origin-name false-match filter.
  * A Chapter 99 heading that names specific subheadings/headings/chapters only applies to
  * lines under them; a heading that names nothing (IEEPA, Section 301 lists, "any country")
  * applies to whatever matched it.

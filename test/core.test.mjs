@@ -44,6 +44,22 @@ test("normalizeOrigin: alternative spellings resolve, misspellings are rejected"
   assert.equal(core.normalizeOrigin("Taiwan").name, "Taiwan");
 });
 
+test("normalizeOrigin: never throws on non-string input", () => {
+  for (const bad of [undefined, null, 42, {}, [], true, Symbol.iterator]) {
+    assert.equal(core.normalizeOrigin(bad), null, `normalizeOrigin(${String(bad)}) must be null`);
+  }
+});
+
+test("normalizeOrigin: needles cover the wording the schedule actually uses", () => {
+  // the schedule writes "the Russian Federation", never the bare country name
+  assert.deepEqual(core.normalizeOrigin("RU"), { name: "Russia", needles: ["russia", "russian federation"] });
+  assert.deepEqual(core.normalizeOrigin("Russian Federation").needles, ["russia", "russian federation"]);
+  // ... and "C\u00f4te d'Ivoire", never "Ivory Coast"
+  assert.deepEqual(core.normalizeOrigin("CI"), { name: "Ivory Coast", needles: ["ivory coast", "c\u00f4te d'ivoire"] });
+  // a curly apostrophe in the input must still resolve
+  assert.equal(core.normalizeOrigin("C\u00f4te d\u2019Ivoire").name, "Ivory Coast");
+});
+
 test("citedPrefixes: subheadings, ranges, chapters; ignores 99xx and note references", () => {
   const tires = data.entries.find((e) => e.htsno === "9903.40.05").path;
   assert.deepEqual(core.citedPrefixes(tires).sort(), ["40111010", "40112010"]);
