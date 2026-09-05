@@ -1,6 +1,6 @@
 {
   "name": "tariff-resolver",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "mcpName": "io.github.opsloft/tariff-resolver",
   "description": "MCP server: US HTS tariff lookup, chapter-99 additional-duty rules, and landed-cost components from official USITC public-domain data. Not affiliated with any government agency.",
   "type": "module",

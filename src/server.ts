@@ -41,7 +41,7 @@ const STACKING_WARNING =
   "verify current collection status against CBP CSMS messages before relying on any stack.";
 
 export function buildServer(): McpServer {
-  const server = new McpServer({ name: "tariff-resolver", version: "1.1.0" });
+  const server = new McpServer({ name: "tariff-resolver", version: "1.1.1" });
 
   server.registerTool(
     "search_hs_candidates",
